@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+  <PropertyGroup Label="Common Package Metadata">
+    <Authors Condition="'$(Authors)'==''">Fredrik Høisæther Rasch</Authors>
+    <Product Condition="'$(Product)'==''">TH-NETII .NET Common libraries and extensions</Product>
+    <Company Condition="'$(Company)'==''">TH-NETII Rasch Solutions</Company>
+    <Copyright Condition="'$(Copyright)'==''">Written by Fredrik Høisæther Rasch, $([System.DateTime]::Now.Year)</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Label="Repository Metadata">
+    <RepositoryType Condition="'$(RepositoryType)'==''">git</RepositoryType>
+    <RepositoryUrl Condition="'$(RepositoryUrl)'==''">https://github.com/thnetii/dotnet-common.git</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageLicenseUrl>https://github.com/thnetii/dotnet-common/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/thnetii/dotnet-common</PackageProjectUrl>
+  </PropertyGroup>
+  <!--
+  <ItemGroup>
+    <Compile Remove="obj\**\*.*" />
+    <Compile Remove="bin\**\*.*" />
+    <None Remove="obj\**\*.*" />
+    <None Remove="bin\**\*.*" />
+  </ItemGroup>
+  -->
+</Project>

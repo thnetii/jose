@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+  <PropertyGroup Label="BasePath">
+    <BaseOutputPath Condition="'$(BaseOutputPath)'==''">$([MSBuild]::ValueOrDefault(`$(SolutionDir)`, `$(MSBuildThisFileDirectory)`))bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'==''">$([MSBuild]::ValueOrDefault(`$(SolutionDir)`, `$(MSBuildThisFileDirectory)`))obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

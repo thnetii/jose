@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup Label="VersionDefaults">
+    <VersionMajor Condition="'$(VersionMajor)' == ''">0</VersionMajor>
+    <VersionMinor Condition="'$(VersionMinor)' == ''">0</VersionMinor>
+    <VersionRevision Condition="'$(VersionRevision)' == ''">1</VersionRevision>
+    <AcmeIetf>acmedraft05</AcmeIetf>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VersionPrefix Condition="'$(VersionPrefix)'==''">$(VersionMajor).$(VersionMinor).$(VersionRevision)</VersionPrefix>
+    <FileVersion>$(VersionMajor).$(VersionMinor).$(VersionRevision)</FileVersion>
+    <AssemblyVersion Condition="'$(BuildNumber)'==''">$(VersionMajor).$(VersionMinor).$(VersionRevision)</AssemblyVersion>
+    <AssemblyVersion Condition="'$(BuildNumber)'!=''">$(VersionMajor).$(VersionMinor).$(VersionRevision).$(BuildNumber)</AssemblyVersion>
+    <VersionSuffix Condition="'$(VersionSuffix)'!=''">$(VersionSuffix)-$(AcmeIetf)</VersionSuffix>
+    <VersionSuffix Condition="'$(VersionSuffix)'==''">$(AcmeIetf)</VersionSuffix>
+    <VersionSuffix Condition="'$(BuildNumber)'!=''">$(VersionSuffix)-b$(BuildNumber)</VersionSuffix>
+  </PropertyGroup>
+</Project>
