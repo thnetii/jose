@@ -14,4 +14,13 @@
   <Import Project="..\..\Version.props" />
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <ItemGroup Label="ProjectReferences">
+    <ProjectReference Include="..\THNETII.Common\THNETII.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="PackageReferences">
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+
 </Project>
