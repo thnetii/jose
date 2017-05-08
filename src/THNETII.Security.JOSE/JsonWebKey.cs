@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using THNETII.Common;
 
@@ -23,6 +25,9 @@ namespace THNETII.Security.JOSE
             get => kty.ConvertedValue;
             set => kty.ConvertedValue = value;
         }
+
+        [JsonExtensionData]
+        public IDictionary<string, object> ExtensionData { get; set; }
 
         private static JsonWebKeyType ConvertStringToKty(string rawKty)
         {
