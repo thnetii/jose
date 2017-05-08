@@ -4,6 +4,11 @@ using THNETII.Common;
 
 namespace THNETII.Security.JOSE
 {
+    /// <summary>
+    /// A JSON Web Key (JWK) is a JavaScript Object Notation (JSON) data
+    /// structure that represents a cryptographic key.
+    /// </summary>
+    /// <remarks>The JSON Web Key (JWK) is specified in <a href="https://tools.ietf.org/html/rfc7517">RFC 7517</a>.</remarks>
     [DataContract]
     public class JsonRsaWebKey : JsonWebKey
     {
