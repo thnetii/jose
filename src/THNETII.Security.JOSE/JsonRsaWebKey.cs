@@ -16,6 +16,20 @@ namespace THNETII.Security.JOSE
         private readonly DuplexConversionTuple<string, byte[]> dq = CreateBase64UrlDuplexConversionTuple();
         private readonly DuplexConversionTuple<string, byte[]> qi = CreateBase64UrlDuplexConversionTuple();
 
+        /// <inheritdoc />
+        public override string KeyTypeString
+        {
+            get => base.KeyTypeString;
+            set => base.KeyTypeString = (value == "RSA" ? value : throw new ArgumentException($"{nameof(value)} must be \"RSA\".", nameof(value)));
+        }
+
+        /// <inheritdoc />
+        public override JsonWebKeyType KeyType
+        {
+            get => base.KeyType;
+            set => base.KeyType = (value == JsonWebKeyType.Rsa ? value : throw new ArgumentException($"value must be {JsonWebKeyType.Rsa}.", nameof(value)));
+        }
+
         [IgnoreDataMember]
         public byte[] N
         {
@@ -134,6 +148,11 @@ namespace THNETII.Security.JOSE
                 Base64UrlEncoder.FromBase64UrlString,
                 Base64UrlEncoder.ToBase64UrlString
                 );
+        }
+
+        public JsonRsaWebKey() : base()
+        {
+            KeyType = JsonWebKeyType.Rsa;
         }
     }
 }
