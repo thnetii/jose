@@ -26,7 +26,7 @@ namespace THNETII.Security.JOSE
 
         private static JsonWebKeyType ConvertStringToKty(string rawKty)
         {
-            if (Enum.TryParse(rawKty, out JsonWebKeyType kty))
+            if (Enum.TryParse(rawKty, ignoreCase: true, result: out JsonWebKeyType kty))
                 return kty;
             else
                 return JsonWebKeyType.Unknown;
