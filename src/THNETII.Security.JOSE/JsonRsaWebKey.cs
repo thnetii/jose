@@ -22,6 +22,7 @@ namespace THNETII.Security.JOSE
         private readonly DuplexConversionTuple<string, byte[]> qi = CreateBase64UrlDuplexConversionTuple();
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentException"><c>value</c> must be <c>"RSA"</c>.</exception>
         public override string KeyTypeString
         {
             get => base.KeyTypeString;
@@ -29,12 +30,16 @@ namespace THNETII.Security.JOSE
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentException"><c>value</c> must be the <see cref="JsonWebKeyType.Rsa"/> value of the <see cref="JsonWebKeyType"/> enumeration.</exception>
         public override JsonWebKeyType KeyType
         {
             get => base.KeyType;
             set => base.KeyType = (value == JsonWebKeyType.Rsa ? value : throw new ArgumentException($"value must be {JsonWebKeyType.Rsa}.", nameof(value)));
         }
 
+        /// <summary>
+        /// The RSA modulus, expressed as a byte array to express very large integer values.
+        /// </summary>
         [IgnoreDataMember]
         public byte[] N
         {
@@ -42,6 +47,9 @@ namespace THNETII.Security.JOSE
             set => n.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The RSA public exponent, expressed as a byte array to express very large integer values.
+        /// </summary>
         [IgnoreDataMember]
         public byte[] E
         {
@@ -49,6 +57,9 @@ namespace THNETII.Security.JOSE
             set => e.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The RSA private exponent, expressed as a byte array to express very large integer values.
+        /// </summary>
         [IgnoreDataMember]
         public byte[] D
         {
@@ -56,6 +67,9 @@ namespace THNETII.Security.JOSE
             set => d.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The first factor.
+        /// </summary>
         [IgnoreDataMember]
         public byte[] P
         {
@@ -63,6 +77,9 @@ namespace THNETII.Security.JOSE
             set => p.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The second factor.
+        /// </summary>
         [IgnoreDataMember]
         public byte[] Q
         {
@@ -70,6 +87,9 @@ namespace THNETII.Security.JOSE
             set => q.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The first factor's CRT exponent
+        /// </summary>
         [IgnoreDataMember]
         public byte[] DP
         {
@@ -77,6 +97,9 @@ namespace THNETII.Security.JOSE
             set => dp.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The second factor's CRT exponent
+        /// </summary>
         [IgnoreDataMember]
         public byte[] DQ
         {
@@ -84,6 +107,9 @@ namespace THNETII.Security.JOSE
             set => dq.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The (first) CRT coefficient
+        /// </summary>
         [IgnoreDataMember]
         public byte[] QI
         {
@@ -91,6 +117,9 @@ namespace THNETII.Security.JOSE
             set => qi.ConvertedValue = value;
         }
 
+        /// <summary>
+        /// The RSA modulus, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "n")]
         public string NBase64String
         {
@@ -98,6 +127,9 @@ namespace THNETII.Security.JOSE
             set => n.RawValue = value;
         }
 
+        /// <summary>
+        /// The RSA public exponent, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "e")]
         public string EBase64String
         {
@@ -105,6 +137,9 @@ namespace THNETII.Security.JOSE
             set => e.RawValue = value;
         }
 
+        /// <summary>
+        /// The RSA private exponent, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "d", IsRequired = false, EmitDefaultValue = false)]
         public string DBase64String
         {
@@ -112,6 +147,9 @@ namespace THNETII.Security.JOSE
             set => d.RawValue = value;
         }
 
+        /// <summary>
+        /// The first factor, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "p", IsRequired = false, EmitDefaultValue = false)]
         public string PBase64String
         {
@@ -119,6 +157,9 @@ namespace THNETII.Security.JOSE
             set => p.RawValue = value;
         }
 
+        /// <summary>
+        /// The second factor, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "q", IsRequired = false, EmitDefaultValue = false)]
         public string QBase64String
         {
@@ -126,6 +167,9 @@ namespace THNETII.Security.JOSE
             set => q.RawValue = value;
         }
 
+        /// <summary>
+        /// The first factor's CRT exponent, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "dp", IsRequired = false, EmitDefaultValue = false)]
         public string DPBase64String
         {
@@ -133,6 +177,9 @@ namespace THNETII.Security.JOSE
             set => dp.RawValue = value;
         }
 
+        /// <summary>
+        /// The second factor's CRT exponent, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "dq", IsRequired = false, EmitDefaultValue = false)]
         public string DQBase64String
         {
@@ -140,6 +187,9 @@ namespace THNETII.Security.JOSE
             set => dq.RawValue = value;
         }
 
+        /// <summary>
+        /// The first CRT coefficient, expressed as a Base64-URL-safe-encoded byte string.
+        /// </summary>
         [DataMember(Name = "qi", IsRequired = false, EmitDefaultValue = false)]
         public string QIBase64String
         {
@@ -155,6 +205,9 @@ namespace THNETII.Security.JOSE
                 );
         }
 
+        /// <summary>
+        /// Creates a new RSA JWK.
+        /// </summary>
         public JsonRsaWebKey() : base()
         {
             KeyType = JsonWebKeyType.Rsa;
