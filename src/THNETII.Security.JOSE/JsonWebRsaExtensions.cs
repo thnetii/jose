@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Security.Cryptography;
 
 namespace THNETII.Security.JOSE
@@ -31,6 +32,19 @@ namespace THNETII.Security.JOSE
                 jwk.QI = param.InverseQ;
 
             return jwk;
+        }
+
+        public static JsonRsaWebKey ToRsaWebKey(this JsonWebKey jwk_general)
+        {
+            if (jwk_general == null)
+                return null;
+            else if (jwk_general is JsonRsaWebKey jwk_rsa)
+                return jwk_rsa;
+            else
+            {
+                var jwk_json = JsonConvert.SerializeObject(jwk_general);
+                return JsonConvert.DeserializeObject<JsonRsaWebKey>(jwk_json);
+            }
         }
     }
 }
