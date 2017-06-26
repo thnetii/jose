@@ -2,8 +2,17 @@
 
 namespace THNETII.Security.JOSE
 {
+    /// <summary>
+    /// Identifies the cryptographic algorithm
+    /// family used with the key, such as "RSA" or "EC". Well-known JSON Web Key Type values should
+    /// be registered in the IANA "JSON Web Key Types" registry
+    /// established by the the JSON Web Algorithms RFC [<a href="https://tools.ietf.org/html/rfc7518">RFC7518</a>]
+    /// </summary>
     public enum JsonWebKeyType
     {
+        /// <summary>
+        /// An unrecognized JSON Web Key Type.
+        /// </summary>
         Unknown,
         /// <summary>
         /// JWKs can represent Elliptic Curve [<a href="https://tools.ietf.org/html/rfc7518.html#ref-DSS">DSS</a>] keys.  In this case, the
