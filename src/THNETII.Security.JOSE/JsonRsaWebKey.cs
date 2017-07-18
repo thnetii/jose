@@ -21,22 +21,6 @@ namespace THNETII.Security.JOSE
         private readonly DuplexConversionTuple<string, byte[]> dq = CreateBase64UrlDuplexConversionTuple();
         private readonly DuplexConversionTuple<string, byte[]> qi = CreateBase64UrlDuplexConversionTuple();
 
-        /// <inheritdoc />
-        /// <exception cref="ArgumentException"><c>value</c> must be <c>"RSA"</c>.</exception>
-        public override string KeyTypeString
-        {
-            get => base.KeyTypeString;
-            set => base.KeyTypeString = (value == "RSA" ? value : throw new ArgumentException($"{nameof(value)} must be \"RSA\".", nameof(value)));
-        }
-
-        /// <inheritdoc />
-        /// <exception cref="ArgumentException"><c>value</c> must be the <see cref="JsonWebKeyType.Rsa"/> value of the <see cref="JsonWebKeyType"/> enumeration.</exception>
-        public override JsonWebKeyType KeyType
-        {
-            get => base.KeyType;
-            set => base.KeyType = (value == JsonWebKeyType.Rsa ? value : throw new ArgumentException($"value must be {JsonWebKeyType.Rsa}.", nameof(value)));
-        }
-
         /// <summary>
         /// The RSA modulus, expressed as a byte array to express very large integer values.
         /// </summary>
@@ -208,9 +192,6 @@ namespace THNETII.Security.JOSE
         /// <summary>
         /// Creates a new RSA JWK.
         /// </summary>
-        public JsonRsaWebKey() : base()
-        {
-            KeyType = JsonWebKeyType.Rsa;
-        }
+        public JsonRsaWebKey() : base(JsonWebKeyType.Rsa) { }
     }
 }

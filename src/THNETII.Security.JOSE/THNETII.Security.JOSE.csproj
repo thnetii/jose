@@ -17,6 +17,7 @@
 
   <ItemGroup Label="ProjectReferences">
     <ProjectReference Include="..\THNETII.Common\THNETII.Common.csproj" />
+    <ProjectReference Include="..\THNETII.Common.DataContractSerializer\THNETII.Common.DataContractSerializer.csproj" />
   </ItemGroup>
 
   <ItemGroup Label="PackageReferences">

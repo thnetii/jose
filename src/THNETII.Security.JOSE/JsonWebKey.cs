@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using THNETII.Common;
+using THNETII.Common.DataContractSerializer;
 
 namespace THNETII.Security.JOSE
 {
@@ -19,11 +20,14 @@ namespace THNETII.Security.JOSE
     /// defines multiple kinds of cryptographic keys and their associated
     /// members.
     /// </remarks>
-    [DataContract]
+    [DataContract, JsonConverter(typeof(JsonWebKeyConverter))]
     public class JsonWebKey
     {
+        public const string KeyTypeJsonPropertyName = "kty";
+
+        private readonly Tuple<string, JsonWebKeyType> lockKty;
         private readonly DuplexConversionTuple<string, JsonWebKeyType> kty =
-            new DuplexConversionTuple<string, JsonWebKeyType>(ConvertStringToKty, ConvertKtyToString);
+            new DuplexConversionTuple<string, JsonWebKeyType>(EnumStringConverter<JsonWebKeyType>.Parse, EnumStringConverter<JsonWebKeyType>.ToString);
 
         /// <summary>
         /// The "kty" (key type) parameter identifies the cryptographic algorithm
@@ -33,11 +37,18 @@ namespace THNETII.Security.JOSE
         /// Name. The "kty" value is a case-sensitive string. This
         /// member MUST be present in a JWK.
         /// </summary>
-        [DataMember(Name = "kty")]
+        [DataMember(Name = KeyTypeJsonPropertyName)]
         public virtual string KeyTypeString
         {
             get => kty.RawValue;
-            set => kty.RawValue = value;
+            set => kty.RawValue = AssertKtyStringValue(value);
+        }
+
+        private string AssertKtyStringValue(string value)
+        {
+            if (lockKty == null || lockKty.Item1.Equals(value, StringComparison.OrdinalIgnoreCase))
+                return value;
+            throw new ArgumentException($"{nameof(value)} must be \"{lockKty.Item1}\".", nameof(value));
         }
 
         /// <summary>
@@ -49,7 +60,14 @@ namespace THNETII.Security.JOSE
         public virtual JsonWebKeyType KeyType
         {
             get => kty.ConvertedValue;
-            set => kty.ConvertedValue = value;
+            set => kty.ConvertedValue = AssertKtyValue(value);
+        }
+
+        private JsonWebKeyType AssertKtyValue(JsonWebKeyType value)
+        {
+            if (lockKty == null || lockKty.Item2 == value)
+                return value;
+            throw new ArgumentException($"{nameof(value)} must be the {lockKty.Item2} value of the {nameof(JsonWebKeyType)} enumeration.", nameof(value));
         }
 
         /// <summary>
@@ -63,22 +81,12 @@ namespace THNETII.Security.JOSE
         [JsonExtensionData]
         public IDictionary<string, object> ExtensionData { get; set; }
 
-        private static JsonWebKeyType ConvertStringToKty(string rawKty)
-        {
-            if (Enum.TryParse(rawKty, ignoreCase: true, result: out JsonWebKeyType kty))
-                return kty;
-            else
-                return JsonWebKeyType.Unknown;
-        }
+        public JsonWebKey() { }
 
-        private static string ConvertKtyToString(JsonWebKeyType kty)
+        protected JsonWebKey(JsonWebKeyType lockKty) : this()
         {
-            switch (kty)
-            {
-                case JsonWebKeyType.Ec: return "EC";
-                case JsonWebKeyType.Rsa: return "RSA";
-                default: return null;
-            }
+            KeyType = lockKty;
+            this.lockKty = Tuple.Create(EnumStringConverter<JsonWebKeyType>.ToString(lockKty), lockKty);
         }
     }
 }

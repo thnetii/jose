@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 
 namespace THNETII.Security.JOSE
@@ -45,29 +44,34 @@ namespace THNETII.Security.JOSE
         }
 
         /// <summary>
-        /// Converts the JSON Web Key instance into an RSA-type JSON Web Key.
+        /// Imports the specified JSON Web Key as parameters for the given RSA instance.
         /// </summary>
-        /// <param name="jwk_general">The JSON Web Key instance to convert.</param>
-        /// <returns>
-        /// <list type="bullet">
-        /// <item><c>null</c> if <paramref name="jwk_general"/> is <c>null</c>.</item>
-        /// <item>The exact same instance as specified in the <paramref name="jwk_general"/> paramenter, if <paramref name="jwk_general"/> already is an instance of the <see cref="JsonRsaWebKey"/> class.</item>
-        /// <item>A new instance of the <see cref="JsonRsaWebKey"/> class, that is deserialized from the JSON string produced by serializing <paramref name="jwk_general"/>.</item>
-        /// </list>
-        /// </returns>
-        /// <exception cref="InvalidCastException">Unable to convert <paramref name="jwk_general"/> to an RSA JSON Web Key object. The Exception message contains the JSON representation of <paramref name="jwk_general"/>.</exception>
-        public static JsonRsaWebKey ToRsaWebKey(this JsonWebKey jwk_general)
+        /// <param name="rsa">The RSA cryptographic instance into which the key will be imported. Must not be <c>null</c>.</param>
+        /// <param name="jwk">The JSON RSA Web Key to import. Must not be <c>null</c>.</param>
+        /// <exception cref="ArgumentNullException">Either <paramref name="rsa"/> or <paramref name="jwk"/> is <c>null</c>.</exception>
+        /// <exception cref="CryptographicException">The <paramref name="jwk"/> parameter has missing fields.</exception>
+        public static void ImportJsonWebKey(this RSA rsa, JsonRsaWebKey jwk)
         {
-            if (jwk_general == null)
-                return null;
-            else if (jwk_general is JsonRsaWebKey jwk_rsa)
-                return jwk_rsa;
-            else
+            if (rsa == null)
+                throw new ArgumentNullException(nameof(rsa));
+            else if (jwk == null)
+                throw new ArgumentNullException(nameof(jwk));
+            try
             {
-                var jwk_json = JsonConvert.SerializeObject(jwk_general);
-                try { return JsonConvert.DeserializeObject<JsonRsaWebKey>(jwk_json); }
-                catch (ArgumentException argExcept) { throw new InvalidCastException($"Unable to convert to an RSA JSON Web Key object.{Environment.NewLine}{jwk_json}", argExcept); }
+                rsa.ImportParameters(new RSAParameters()
+                {
+                    Modulus = jwk.N,
+                    Exponent = jwk.E,
+                    D = jwk.D,
+                    P = jwk.P,
+                    Q = jwk.Q,
+                    DP = jwk.DP,
+                    DQ = jwk.DQ,
+                    InverseQ = jwk.QI
+                });
             }
+            catch (CryptographicException cryptoExcept)
+            { throw new CryptographicException($"The {nameof(jwk)} parameter has missing fields.", cryptoExcept); }
         }
     }
 }

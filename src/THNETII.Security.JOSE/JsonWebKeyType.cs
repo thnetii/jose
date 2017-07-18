@@ -28,5 +28,12 @@ namespace THNETII.Security.JOSE
         /// </summary>
         [EnumMember(Value = "RSA")]
         Rsa,
+        /// <summary>
+        /// When the JWK <c>"kty"</c> member value is <c>"oct"</c> (octet sequence), the JWK
+        /// is used to represent a symmetric key (or
+        /// another key whose value is a single octet sequence).
+        /// </summary>
+        [EnumMember(Value = "oct")]
+        Oct,
     }
 }
