@@ -49,29 +49,23 @@ namespace THNETII.Security.JOSE
         /// <param name="rsa">The RSA cryptographic instance into which the key will be imported. Must not be <c>null</c>.</param>
         /// <param name="jwk">The JSON RSA Web Key to import. Must not be <c>null</c>.</param>
         /// <exception cref="ArgumentNullException">Either <paramref name="rsa"/> or <paramref name="jwk"/> is <c>null</c>.</exception>
-        /// <exception cref="CryptographicException">The <paramref name="jwk"/> parameter has missing fields.</exception>
         public static void ImportJsonWebKey(this RSA rsa, JsonRsaWebKey jwk)
         {
             if (rsa == null)
                 throw new ArgumentNullException(nameof(rsa));
             else if (jwk == null)
                 throw new ArgumentNullException(nameof(jwk));
-            try
+            rsa.ImportParameters(new RSAParameters()
             {
-                rsa.ImportParameters(new RSAParameters()
-                {
-                    Modulus = jwk.N,
-                    Exponent = jwk.E,
-                    D = jwk.D,
-                    P = jwk.P,
-                    Q = jwk.Q,
-                    DP = jwk.DP,
-                    DQ = jwk.DQ,
-                    InverseQ = jwk.QI
-                });
-            }
-            catch (CryptographicException cryptoExcept)
-            { throw new CryptographicException($"The {nameof(jwk)} parameter has missing fields.", cryptoExcept); }
+                Modulus = jwk.N,
+                Exponent = jwk.E,
+                D = jwk.D,
+                P = jwk.P,
+                Q = jwk.Q,
+                DP = jwk.DP,
+                DQ = jwk.DQ,
+                InverseQ = jwk.QI
+            });
         }
     }
 }
