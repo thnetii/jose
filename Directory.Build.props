@@ -15,8 +15,8 @@
     <PackageProjectUrl>https://github.com/thnetii/dotnet-common</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Label="BasePath">
-    <BaseOutputPath>$([MSBuild]::ValueOrDefault(`$(SolutionDir)`, `$(MSBuildThisFileDirectory)`))bin\</BaseOutputPath>
-    <BaseIntermediateOutputPath>$([MSBuild]::ValueOrDefault(`$(SolutionDir)`, `$(MSBuildThisFileDirectory)`))obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Label="Version">
     <VersionPrefix>0.0.1</VersionPrefix>
