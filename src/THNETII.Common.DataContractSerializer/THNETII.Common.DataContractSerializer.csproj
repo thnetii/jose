@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project>
-  <Import Project="..\..\Paths.props" />
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -10,11 +7,6 @@
 
     <Description>TH-NETII .NET Common library extension for the DataContractSerializer classes in the System.Runtime.Serialization namespace</Description>
   </PropertyGroup>
-
-  <Import Project="..\..\Common.props" />
-  <Import Project="..\..\Version.props" />
-
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />

@@ -1,19 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project>
-  <Import Project="..\..\Paths.props" />
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DebugType>portable</DebugType>
     <Description></Description>
   </PropertyGroup>
-
-  <Import Project="..\..\Common.props" />
-  <Import Project="..\..\Version.props" />
-
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
   <ItemGroup Label="ProjectReferences">
     <ProjectReference Include="..\THNETII.Common\THNETII.Common.csproj" />
