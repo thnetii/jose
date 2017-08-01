@@ -39,6 +39,26 @@ namespace THNETII.Common.DataContractSerializer
             return (T)Enum.Parse(typeRef, s, ignoreCase: true);
         }
 
+        public static T ParseOrDefault(string s) => ParseOrDefault(s, default(T));
+
+        public static T ParseOrDefault(string s, T @default)
+        {
+            if (stringToValue.TryGetValue(s, out T value))
+                return value;
+            else if (Enum.TryParse<T>(s, out value))
+                return value;
+            return @default;
+        }
+
+        public static T? ParseOrNull(string s)
+        {
+            if (stringToValue.TryGetValue(s, out T value))
+                return value;
+            else if (Enum.TryParse<T>(s, out value))
+                return value;
+            return null;
+        }
+
         public static bool TryParse(string s, out T value)
         {
             if (stringToValue.TryGetValue(s, out value))
