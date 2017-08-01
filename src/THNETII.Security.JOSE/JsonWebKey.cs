@@ -27,7 +27,7 @@ namespace THNETII.Security.JOSE
 
         private readonly Tuple<string, JsonWebKeyType> lockKty;
         private readonly DuplexConversionTuple<string, JsonWebKeyType> kty =
-            new DuplexConversionTuple<string, JsonWebKeyType>(EnumStringConverter<JsonWebKeyType>.Parse, EnumStringConverter<JsonWebKeyType>.ToString);
+            new DuplexConversionTuple<string, JsonWebKeyType>(EnumStringConverter<JsonWebKeyType>.ParseOrDefault, EnumStringConverter<JsonWebKeyType>.ToString);
 
         /// <summary>
         /// The "kty" (key type) parameter identifies the cryptographic algorithm
