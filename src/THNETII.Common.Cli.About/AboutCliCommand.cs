@@ -11,19 +11,35 @@ using System.Text.RegularExpressions;
 
 namespace THNETII.Common.Cli
 {
+    /// <summary>
+    /// A CLI command that uses Assembly Reflection to provide a default implementation for printing
+    /// assembly and runtime information for the exceutable that is being executed.
+    /// </summary>
     public class AboutCliCommand : CliCommand
     {
         private static readonly Regex pascalCaseBoundaryMatcher = new Regex(@"(?<=[A-Za-z])(?=[A-Z][a-z])|(?<=[a-z0-9])(?=[0-9]?[A-Z])");
         private readonly Assembly executeAssembly;
 
-        public AboutCliCommand(
+        /// <summary>
+        /// Creates a new About CLI command instance for the specified executing Assembly.
+        /// </summary>
+        /// <param name="executeAssembly">The executing assembly containing the main entry point of the CLI application.</param>
+        /// <param name="configuration" />
+        /// <param name="logger" />
+        protected AboutCliCommand(
             Assembly executeAssembly,
-            IConfiguration configuration = null, 
-            ILogger<AboutCliCommand> logger = null) 
+            IConfiguration configuration, 
+            ILogger<AboutCliCommand> logger) 
             : base(configuration, logger)
         {
             this.executeAssembly = executeAssembly ?? typeof(AboutCliCommand).GetTypeInfo().Assembly;
         }
+
+        /// <summary>
+        /// Creates a new About CLI command instance for the specified executing Assembly.
+        /// </summary>
+        /// <param name="executeAssembly">The executing assembly containing the main entry point of the CLI application.</param>
+        public AboutCliCommand(Assembly executeAssembly) : this(executeAssembly, null, null) { }
 
         private static void WriteKeyValuePairFormatted(TextWriter writer, IEnumerable<KeyValuePair<string, object>> keyValuePairs)
         {
@@ -39,6 +55,7 @@ namespace THNETII.Common.Cli
                 writer.WriteLine($"{$"{kvp.Key}:".PadRight(longestKeyLength)} {kvp.Value}");
         }
 
+        /// <inheritdoc />
         public override int Run(CommandLineApplication app)
         {
             app.ShowRootCommandFullNameAndVersion();
