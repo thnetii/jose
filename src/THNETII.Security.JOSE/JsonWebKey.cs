@@ -23,6 +23,9 @@ namespace THNETII.Security.JOSE
     [DataContract, JsonConverter(typeof(JsonWebKeyConverter))]
     public class JsonWebKey
     {
+        /// <summary>
+        /// Gets the JSON property key of a serialized JSON Web Key instance.
+        /// </summary>
         public const string KeyTypeJsonPropertyName = "kty";
 
         private readonly Tuple<string, JsonWebKeyType> lockKty;
@@ -37,6 +40,7 @@ namespace THNETII.Security.JOSE
         /// Name. The "kty" value is a case-sensitive string. This
         /// member MUST be present in a JWK.
         /// </summary>
+        /// <exception cref="InvalidOperationException">This instance is locked to a specific key type and its type must not be changed.</exception>
         [DataMember(Name = KeyTypeJsonPropertyName)]
         public virtual string KeyTypeString
         {
@@ -48,7 +52,7 @@ namespace THNETII.Security.JOSE
         {
             if (lockKty == null || lockKty.Item1.Equals(value, StringComparison.OrdinalIgnoreCase))
                 return value;
-            throw new ArgumentException($"{nameof(value)} must be \"{lockKty.Item1}\".", nameof(value));
+            throw new InvalidOperationException($"{nameof(value)} must be \"{lockKty.Item1}\".");
         }
 
         /// <summary>
@@ -56,6 +60,7 @@ namespace THNETII.Security.JOSE
         /// declared JSON Web Key Type. If the value is <see cref="JsonWebKeyType.Unknown"/>
         /// <see cref="KeyTypeString"/> will contain the non-standard key type identifier that is used.
         /// </summary>
+        /// <exception cref="InvalidOperationException">This instance is locked to a specific key type and its type must not be changed.</exception>
         [IgnoreDataMember]
         public virtual JsonWebKeyType KeyType
         {
@@ -67,7 +72,7 @@ namespace THNETII.Security.JOSE
         {
             if (lockKty == null || lockKty.Item2 == value)
                 return value;
-            throw new ArgumentException($"{nameof(value)} must be the {lockKty.Item2} value of the {nameof(JsonWebKeyType)} enumeration.", nameof(value));
+            throw new InvalidOperationException($"{nameof(value)} must be the {lockKty.Item2} value of the {nameof(JsonWebKeyType)} enumeration.");
         }
 
         /// <summary>
@@ -81,12 +86,28 @@ namespace THNETII.Security.JOSE
         [JsonExtensionData]
         public IDictionary<string, object> ExtensionData { get; set; }
 
+        /// <summary>
+        /// Creates a new generic JSON Web Key instance.
+        /// </summary>
         public JsonWebKey() { }
 
+        /// <summary>
+        /// Creates a new JSON Web Key instance whose key type is locked to the specified type.
+        /// </summary>
+        /// <param name="lockKty">The key type to which the new instance is locked.</param>
+        /// <remarks>This constructor should be called from all constructors of inheriting types to ensure that the Key type cannot be changed once the instance is created.</remarks>
         protected JsonWebKey(JsonWebKeyType lockKty) : this()
         {
             KeyType = lockKty;
             this.lockKty = Tuple.Create(EnumStringConverter<JsonWebKeyType>.ToString(lockKty), lockKty);
         }
+
+#if DEBUG
+        /// <summary>
+        /// Returns the JSON representation of this instance.
+        /// </summary>
+        /// <returns>A JSON string of the current instance.</returns>
+        public override string ToString() => JsonConvert.SerializeObject(this);
+#endif // DEBUG
     }
 }
