@@ -5,7 +5,7 @@ using System.Text;
 
 namespace THNETII.Security.JOSE
 {
-    public static class JsonWebEcExtensions
+    public static class JoseEcDsaExtensions
     {
         public static JsonEcWebKey ExportJsonWebKey(this ECDsa ecdsa, bool includePrivateParameters)
         {
