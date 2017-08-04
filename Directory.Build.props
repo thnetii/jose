@@ -23,7 +23,7 @@
     <FileVersion>$(VersionPrefix)</FileVersion>
     <AssemblyVersion Condition="'$(BuildNumber)'==''">$(FileVersion)</AssemblyVersion>
     <AssemblyVersion Condition="'$(BuildNumber)'!=''">$(FileVersion).$(BuildNumber)</AssemblyVersion>
-    <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'==''">$(VersionSuffix)b$(BuildNumber)</VersionSuffix>
     <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'!=''">$(VersionSuffix)-b$(BuildNumber)</VersionSuffix>
+    <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'==''">$(VersionSuffix)b$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
 </Project>
