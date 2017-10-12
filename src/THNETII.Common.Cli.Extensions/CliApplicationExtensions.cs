@@ -10,32 +10,27 @@ namespace THNETII.Common.Cli
 {
     public static class CliApplicationExtensions
     {
-        public static CliApplication CreateDefault(this CliApplication application, Type executingType) => CreateDefault(application, executingType.ThrowIfNull(nameof(executingType)).GetTypeInfo().Assembly);
-
-        public static CliApplication CreateDefault(this CliApplication application, Assembly executingAssembly)
+        public static CliBuilder<TCommand> CreateDefault<TCommand>(this CliBuilder<TCommand> cliBuilder, bool debug = false)
+            where TCommand : CliCommand
         {
-            if (application == null)
-                throw new ArgumentNullException(nameof(application));
+            if (cliBuilder == null)
+                throw new ArgumentNullException(nameof(cliBuilder));
 
-            application.ConfigurationBuilder(configBuilder => DefaultConfigurationBuilder(configBuilder, executingAssembly));
-            application.ConfigureServices(DefaultConfigureServices);
-            application.AlwaysRun(DefaultAlwaysRun);
+            cliBuilder.Configuration(configBuilder => DefaultConfigurationBuilder(configBuilder, cliBuilder.ExecutingAssembly, debug));
+            cliBuilder.ConfigureServices(DefaultConfigureServices);
+            cliBuilder.PreRunCommand((app, serviceProvider) => DefaultAlwaysRun(serviceProvider, debug));
 
-            return application;
+            return cliBuilder;
         }
 
         internal static readonly string LoggingSectionConfigKey = "Logging";
         internal static readonly string LogLevelConfigKey = ConfigurationPath.Combine(LoggingSectionConfigKey, nameof(LogLevel), "Default");
 
-        public static void DefaultConfigurationBuilder(IConfigurationBuilder configBuilder, Assembly executingAssembly)
+        public static void DefaultConfigurationBuilder(IConfigurationBuilder configBuilder, Assembly executingAssembly, bool debug = false)
         {
             configBuilder.AddInMemoryCollection(new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-#if DEBUG
-                [LogLevelConfigKey] = nameof(LogLevel.Information),
-#else // !DEBUG
-                [LogLevelConfigKey] = nameof(LogLevel.Warning),
-#endif //  !DEBUG
+                [LogLevelConfigKey] = debug ? nameof(LogLevel.Information) : nameof(LogLevel.Warning),
             });
             if (executingAssembly != null)
             {
@@ -47,15 +42,13 @@ namespace THNETII.Common.Cli
                 if (!string.IsNullOrWhiteSpace(executableDirectory) && !string.Equals(Directory.GetCurrentDirectory(), executableDirectory, StringComparison.OrdinalIgnoreCase))
                 {
                     configBuilder.AddJsonFile(Path.Combine(executableDirectory, "appsettings.json"), optional: true);
-#if DEBUG
-                    configBuilder.AddJsonFile(Path.Combine(executableDirectory, "appsettings.Debug.json"), optional: true);
-#endif // DEBUG
+                    if (debug)
+                        configBuilder.AddJsonFile(Path.Combine(executableDirectory, "appsettings.Debug.json"), optional: true);
                 }
             }
             configBuilder.AddJsonFile("appsettings.json", optional: true);
-#if DEBUG
-            configBuilder.AddJsonFile("appsettings.Debug.json", optional: true);
-#endif // DEBUG
+            if (debug)
+                configBuilder.AddJsonFile("appsettings.Debug.json", optional: true);
             configBuilder.AddEnvironmentVariables();
         }
 
@@ -64,18 +57,14 @@ namespace THNETII.Common.Cli
             services.AddLogging();
         }
 
-        public static void DefaultAlwaysRun(IServiceProvider serviceProvider)
+        public static void DefaultAlwaysRun(IServiceProvider serviceProvider, bool debug = false)
         {
             var loggerFactory = serviceProvider.ThrowIfNull(nameof(serviceProvider)).GetService<ILoggerFactory>();
             loggerFactory?
-#if DEBUG
-                .AddDebug(LogLevel.Trace)
-#else // !DEBUG
-                .AddDebug(LogLevel.Information)
-#endif // !DEBUG
+                .AddDebug(debug ? LogLevel.Trace : LogLevel.Information)
                 .AddConsole(serviceProvider.GetService<IConfiguration>()?.GetSection(LoggingSectionConfigKey))
                 ;
-            var cliLogger = loggerFactory?.CreateLogger<CliApplication>();
+            var cliLogger = loggerFactory?.CreateLogger<CliCommand>();
             Console.CancelKeyPress += (sender, e) => cliLogger.LogDebug("Cancel Key press detected: {cancelKey}", e.SpecialKey);
         }
     }
