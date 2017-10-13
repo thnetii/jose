@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DebugType>portable</DebugType>
 
     <Description>TH-NETII .NET Common library extension for the DataContractSerializer classes in the System.Runtime.Serialization namespace</Description>
   </PropertyGroup>

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using THNETII.Common;
@@ -56,8 +57,7 @@ namespace THNETII.Security.JOSE
         /// <remarks>
         /// <para>
         /// Settings this property will also set the value of the <see cref="Algorithm"/>
-        /// property to the appropiate value of the <see cref="JsonWebAlgorithm"/> enumeration
-        /// or to <see cref="JsonWebAlgorithm.Unknown"/> if a non-recognized JWA name is used.
+        /// property to the appropiate value of the <see cref="JsonWebAlgorithm"/> enumeration.
         /// </para>
         /// <para>
         /// The "alg" (algorithm) Header Parameter identifies the cryptographic
@@ -115,6 +115,7 @@ namespace THNETII.Security.JOSE
         /// Section 8 of RFC7515 on TLS requirements. Use of this Header Parameter is
         /// OPTIONAL.
         /// </remarks>
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Member stores the string representation in case non-URI data is deserialized.")]
         [DataMember(Name = "jku", IsRequired = false, EmitDefaultValue = false)]
         public string JwkSetUrlString
         {
@@ -204,7 +205,7 @@ namespace THNETII.Security.JOSE
                 return null;
             else if (MediaTypeHeaderValue.TryParse(mediaTypeString, out var mediaType))
             {
-                if (mediaType.MediaType.StartsWith(applicationMediaTypePrefix) && mediaType.Parameters.Count == 0)
+                if (mediaType.MediaType.StartsWith(applicationMediaTypePrefix, StringComparison.OrdinalIgnoreCase) && mediaType.Parameters.Count == 0)
                     return MediaTypeHeaderValue.TryParse(applicationMediaTypePrefix + mediaTypeString, out mediaType) ? mediaType : null;
                 return mediaType;
             }
@@ -215,7 +216,7 @@ namespace THNETII.Security.JOSE
         {
             if (mediaType == null)
                 return null;
-            else if (mediaType.MediaType.StartsWith(applicationMediaTypePrefix) && mediaType.Parameters.Count == 0)
+            else if (mediaType.MediaType.StartsWith(applicationMediaTypePrefix, StringComparison.OrdinalIgnoreCase) && mediaType.Parameters.Count == 0)
                 return mediaType.ToString().Substring(applicationMediaTypePrefix.Length);
             else
                 return mediaType.ToString();

@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DebugType>portable</DebugType>
     <Description></Description>
   </PropertyGroup>
 

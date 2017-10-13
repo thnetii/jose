@@ -23,7 +23,7 @@ namespace THNETII.Common.Cli
             return cliBuilder;
         }
 
-        internal static readonly string LoggingSectionConfigKey = "Logging";
+        internal const string LoggingSectionConfigKey = "Logging";
         internal static readonly string LogLevelConfigKey = ConfigurationPath.Combine(LoggingSectionConfigKey, nameof(LogLevel), "Default");
 
         public static void DefaultConfigurationBuilder(IConfigurationBuilder configBuilder, Assembly executingAssembly, bool debug = false)

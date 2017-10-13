@@ -1,10 +1,11 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace THNETII.Security.JOSE
 {
+    [SuppressMessage("Microsoft.Naming", "CA1707", Justification = "JWA names defined by IANA")]
     public enum JsonWebAlgorithm
     {
-        Unknown = 0,
         /// <summary>HMAC using SHA-256</summary>
         [EnumMember]
         HS256,

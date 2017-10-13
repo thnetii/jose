@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using THNETII.Common;
 
 namespace THNETII.Security.JOSE
@@ -12,6 +13,7 @@ namespace THNETII.Security.JOSE
         /// other single-valued) key. It is represented as the base64url
         /// encoding of the octet sequence containing the key value.
         /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Member stores the string representation in case non-URI data is deserialized.")]
         [DataMember(Name = "k")]
         public string KeyBase64UrlString
         {

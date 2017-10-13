@@ -26,4 +26,11 @@
     <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'!=''">$(VersionSuffix)-b$(BuildNumber)</VersionSuffix>
     <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'==''">$(VersionSuffix)b$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
+  <PropertyGroup>
+    <Features>IOperation</Features>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1" PrivateAssets="All" />
+  </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace THNETII.Common.Cli
 {
@@ -88,12 +89,36 @@ namespace THNETII.Common.Cli
                 var value = propInfo.GetValue(attr);
                 return new KeyValuePair<string, object>(key, value);
             }).Where(kvp => !string.IsNullOrWhiteSpace(kvp.Key)));
-
             writer.WriteLine();
 
             writer.WriteLine("Execution environment:");
             WriteKeyValuePairFormatted(writer, typeof(RuntimeInformation).GetProperties(BindingFlags.Public | BindingFlags.Static)
                 .Select(StaticMemberInfoToKvp));
+            WriteKeyValuePairFormatted(writer, new Dictionary<string, object>
+            {
+                [nameof(Environment.MachineName)] = Environment.MachineName,
+                [nameof(Environment.ProcessorCount)] = Environment.ProcessorCount,
+                [nameof(Environment.SystemDirectory)] = Environment.SystemDirectory,
+                [nameof(Environment.SystemPageSize)] = Environment.SystemPageSize,
+                [nameof(Environment.CommandLine)] = Environment.CommandLine,
+                [nameof(Environment.CurrentDirectory)] = Environment.CurrentDirectory,
+                [nameof(Environment.OSVersion)] = Environment.OSVersion,
+                ["Is 64-bit OS"] = Environment.Is64BitOperatingSystem,
+                ["Is 64-bit Process"] = Environment.Is64BitProcess,
+                [nameof(Environment.UserDomainName)] = Environment.UserDomainName,
+                [nameof(Environment.UserName)] = Environment.UserName,
+                [nameof(Environment.UserInteractive)] = Environment.UserInteractive,
+                ["CLR Version"] = Environment.Version
+            }.Select(kvp => new KeyValuePair<string, object>(pascalCaseBoundaryMatcher.Replace(kvp.Key, " "), kvp.Value)));
+            writer.WriteLine();
+
+            writer.WriteLine("Current Thread:");
+            WriteKeyValuePairFormatted(writer, Thread.CurrentThread.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(pi => pi.GetCustomAttribute<ObsoleteAttribute>() == null)
+                .Where(pi => pi.PropertyType.GetMethod(nameof(ToString), Type.EmptyTypes).DeclaringType != typeof(object))
+                .Select(pi => new KeyValuePair<string, object>(pi.Name, pi.GetValue(Thread.CurrentThread)))
+                );
+            writer.WriteLine();
 
             return 0;
         }

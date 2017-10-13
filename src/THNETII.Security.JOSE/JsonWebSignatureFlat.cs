@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Text;
 using THNETII.Common;
@@ -53,6 +54,7 @@ namespace THNETII.Security.JOSE
         /// header used together with the <see cref="Signature"/> stored in this instance.
         /// These Header Parameter values are integrity protected.
         /// </remarks>
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Member stores the string representation in case non-URI data is deserialized.")]
         [DataMember(Name = "protected", EmitDefaultValue = false)]
         public string ProtectedBase64UrlString
         {
@@ -80,6 +82,7 @@ namespace THNETII.Security.JOSE
         /// Gets or sets the Base64 URL-safe encoded signature stored in this JWS signature element.
         /// <para>The prarameters specified in <see cref="UnprotectedHeader"/> and <see cref="ProtectedHeader"/> should be used when computing or verifying the value of this property.</para>
         /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Member stores the string representation in case non-URI data is deserialized.")]
         [DataMember(Name = "signature", IsRequired = true)]
         public string SignatureBase64UrlString
         {

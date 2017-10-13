@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Text;
 using THNETII.Common;
@@ -31,6 +32,7 @@ namespace THNETII.Security.JOSE
         /// The value of this property is part of the signing input when computing the Signature included in the JWS.
         /// </para>
         /// </remarks>
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Member stores the string representation in case non-URI data is deserialized.")]
         [DataMember(Name = "payload", IsRequired = true)]
         public string PayloadBase64UrlString
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace THNETII.Security.JOSE
@@ -7,6 +8,8 @@ namespace THNETII.Security.JOSE
     /// Provides encoding and decoding functionality for URL-safe Bas64 encoding as defined in 
     /// <a href="https://tools.ietf.org/html/rfc7515#appendix-C">RFC 7515: Appendix C. Notes on Implementing base64url Encoding without Padding</a>
     /// </summary>
+    [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Arguments in methods in this class do not represent full URIs.")]
+    [SuppressMessage("Microsoft.Design", "CA1055", Justification = "Return values in this class do not represent full URIs.")]
     public static class Base64UrlEncoder
     {
         private static string ToBase64UrlString(StringBuilder base64StringBuilder)
