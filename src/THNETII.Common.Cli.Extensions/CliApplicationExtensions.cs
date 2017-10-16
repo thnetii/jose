@@ -16,9 +16,9 @@ namespace THNETII.Common.Cli
             if (cliBuilder == null)
                 throw new ArgumentNullException(nameof(cliBuilder));
 
-            cliBuilder.Configuration(configBuilder => DefaultConfigurationBuilder(configBuilder, cliBuilder.ExecutingAssembly, debug));
+            //cliBuilder.Configuration(configBuilder => DefaultConfigurationBuilder(configBuilder, cliBuilder.ExecutingAssembly, debug));
             cliBuilder.ConfigureServices(DefaultConfigureServices);
-            cliBuilder.PreRunCommand((app, serviceProvider) => DefaultAlwaysRun(serviceProvider, debug));
+            //cliBuilder.PreRunCommand((app, serviceProvider) => DefaultAlwaysRun(serviceProvider, debug));
 
             return cliBuilder;
         }
