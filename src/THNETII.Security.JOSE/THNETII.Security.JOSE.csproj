@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description></Description>
+  </PropertyGroup>
+
+  <ItemGroup Label="ProjectReferences">
+    <ProjectReference Include="..\..\dotnet-common\src\THNETII.Common\THNETII.Common.csproj" />
+    <ProjectReference Include="..\..\dotnet-common\src\THNETII.Common.DataContractSerializer\THNETII.Common.DataContractSerializer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="PackageReferences">
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+
+</Project>
