@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using THNETII.Common;
 
 namespace THNETII.AppFramework.Cli
 {
