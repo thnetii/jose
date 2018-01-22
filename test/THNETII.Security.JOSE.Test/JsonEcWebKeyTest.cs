@@ -6,14 +6,14 @@ using System;
 
 namespace THNETII.Security.JOSE.Test
 {
-    public class JsonEcWebKeyTest
+    public static class JsonEcWebKeyTest
     {
         private static readonly string CookbookPublicKeyFilePath = IetfJoseCookbook.GetCookbookFilePath(@"3_1.ec_public_key.json");
         private static readonly string CookbookPrivateKeyFilePath = IetfJoseCookbook.GetCookbookFilePath(@"3_2.ec_private_key.json");
         private static readonly JsonSerializer jsonSerializer = JsonSerializer.Create();
 
         [Fact]
-        public void JwkCanDeserializeEcPublicKey()
+        public static void JwkCanDeserializeEcPublicKey()
         {
             JsonEcWebKey jwk = Deserialize(CookbookPublicKeyFilePath);
             Assert.NotNull(jwk);
@@ -25,7 +25,7 @@ namespace THNETII.Security.JOSE.Test
         }
 
         [Fact]
-        public void JwkCanDeserializeEcPriavteKey()
+        public static void JwkCanDeserializeEcPriavteKey()
         {
             JsonEcWebKey jwk = Deserialize(CookbookPrivateKeyFilePath);
             Assert.NotNull(jwk);
@@ -43,7 +43,7 @@ namespace THNETII.Security.JOSE.Test
         }
 
         [Fact]
-        public void JwkCanImportPublicKeyToEcDsa()
+        public static void JwkCanImportPublicKeyToEcDsa()
         {
             JsonEcWebKey jwk = Deserialize(CookbookPublicKeyFilePath);
             ECParameters ecdsaParams;
@@ -59,42 +59,42 @@ namespace THNETII.Security.JOSE.Test
         }
 
         [Fact]
-        public void ECDsaWithNistP256CurveCanExportPublicKeyToJwk()
+        public static void ECDsaWithNistP256CurveCanExportPublicKeyToJwk()
         {
             ECDsaCanExportToJwk(ECCurve.NamedCurves.nistP256);
         }
 
         [Fact]
-        public void ECDsaWithNistP384CurveCanExportPublicKeyToJwk()
+        public static void ECDsaWithNistP384CurveCanExportPublicKeyToJwk()
         {
             ECDsaCanExportToJwk(ECCurve.NamedCurves.nistP384);
         }
 
         [Fact]
-        public void ECDsaWithNistP521CurveCanExportPublicKeyToJwk()
+        public static void ECDsaWithNistP521CurveCanExportPublicKeyToJwk()
         {
             ECDsaCanExportToJwk(ECCurve.NamedCurves.nistP521);
         }
 
         [Fact]
-        public void ECDsaWithNistP256CurveCanExportPrivateKeyToJwk()
+        public static void ECDsaWithNistP256CurveCanExportPrivateKeyToJwk()
         {
             ECDsaCanExportToJwk(ECCurve.NamedCurves.nistP256, true);
         }
 
         [Fact]
-        public void ECDsaWithNistP384CurveCanExportPrivateKeyToJwk()
+        public static void ECDsaWithNistP384CurveCanExportPrivateKeyToJwk()
         {
             ECDsaCanExportToJwk(ECCurve.NamedCurves.nistP384, true);
         }
 
         [Fact]
-        public void ECDsaWithNistP521CurveCanExportPrivateKeyToJwk()
+        public static void ECDsaWithNistP521CurveCanExportPrivateKeyToJwk()
         {
             ECDsaCanExportToJwk(ECCurve.NamedCurves.nistP521, true);
         }
 
-        private void ECDsaCanExportToJwk(ECCurve curve, bool includePrivateParameters = false)
+        private static void ECDsaCanExportToJwk(ECCurve curve, bool includePrivateParameters = false)
         {
             JsonEcWebKey jwk;
             string curveOidFriendlyName = curve.Oid.FriendlyName;

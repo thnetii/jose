@@ -3,10 +3,10 @@ using Xunit;
 
 namespace THNETII.Security.JOSE.Test
 {
-    public class JsonWebKeyRsaExtensionsTest
+    public static class JsonWebKeyRsaExtensionsTest
     {
         [Fact]
-        public void CreatesEqualJsonWebKeyFromPublicExportedRsa()
+        public static void CreatesEqualJsonWebKeyFromPublicExportedRsa()
         {
             var rsa = RSA.Create();
             var rsaParams = rsa.ExportParameters(includePrivateParameters: false);

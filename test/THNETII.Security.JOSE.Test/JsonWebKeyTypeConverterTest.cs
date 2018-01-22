@@ -5,13 +5,13 @@ using Xunit;
 
 namespace THNETII.Security.JOSE.Test
 {
-    public class JsonWebKeyTypeConverterTest
+    public static class JsonWebKeyTypeConverterTest
     {
         [Theory]
         [InlineData("RSA", typeof(JsonRsaWebKey))]
         [InlineData("EC", typeof(JsonEcWebKey))]
         [InlineData("oct", typeof(JsonOctWebKey))]
-        public void JsonWebDeserializerToSpecificType(string ktyString, Type expectType)
+        public static void JsonWebDeserializerToSpecificType(string ktyString, Type expectType)
         {
             var json = JObject.FromObject(new { kty = ktyString });
             JsonWebKey jwk;
