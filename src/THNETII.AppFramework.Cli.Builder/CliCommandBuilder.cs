@@ -17,7 +17,6 @@ namespace THNETII.AppFramework.Cli
         private delegate void ApplicationConfigurationCallback(IConfigurationBuilder configurationBuilder,
             IDictionary<string, string> commandLineArgumentConfigurationDictionary);
 
-        private Func<CommandLineApplication> appFactory;
         private Action<CommandLineApplication> configureApplication;
         private int configureApplicationSpecializedCount = 0;
         private Action<CommandLineApplication, ICollection<ApplicationConfigurationCallback>> configureApplicationSpecialized;
@@ -25,13 +24,6 @@ namespace THNETII.AppFramework.Cli
         private Action<IServiceCollection> configureServices;
 
         protected CliCommandBuilder() { }
-
-        public CliCommandBuilder<TCommand> UseApplicationInitializer(
-            Func<CommandLineApplication> appFactory)
-        {
-            this.appFactory = appFactory;
-            return this;
-        }
 
         public CliCommandBuilder<TCommand> UseApplication(
             Action<CommandLineApplication> configureApplication)
@@ -118,7 +110,7 @@ namespace THNETII.AppFramework.Cli
             return this;
         }
 
-        public class SubCliCommandBuilder<TSubCommand> : CliCommandBuilder<TSubCommand>
+        private class SubCliCommandBuilder<TSubCommand> : CliCommandBuilder<TSubCommand>
             where TSubCommand : CliCommand
         {
             public CliCommandBuilder<TCommand> Parent { get; }
@@ -126,24 +118,6 @@ namespace THNETII.AppFramework.Cli
             public SubCliCommandBuilder(CliCommandBuilder<TCommand> parent)
                 : base() => Parent = parent.ThrowIfNull(nameof(parent));
         }
-
-        public Task<int> ExecuteAsync(string[] args,
-            CancellationToken cancellationToken = default)
-        {
-            return DoExecute(args, cmd =>
-            {
-                switch (cmd)
-                {
-                    case CliAsyncCommand async:
-                        return async.RunAsync(cancellationToken);
-                    default:
-                        Func<int> syncFallback = cmd.Run;
-                        return Task.Run(syncFallback, cancellationToken);
-                }
-            });
-        }
-
-        public int Execute(string[] args) => DoExecute(args, cmd => cmd.Run());
 
         private void OnExecute<TResult>(CommandLineApplication app,
             Func<TCommand, TResult> invokeCommand,
@@ -167,12 +141,9 @@ namespace THNETII.AppFramework.Cli
             result = invokeCommand(cmd);
         }
 
-        private TResult DoExecute<TResult>(string[] args,
-            Func<TCommand, TResult> invokeCommand)
+        protected TResult DoExecute<TResult>(CommandLineApplication app,
+            string[] args, Func<TCommand, TResult> invokeCommand, bool async)
         {
-            var appFactory = this.appFactory
-                ?? (() => new CommandLineApplication());
-            var app = appFactory();
             var configureApplicationCallbacks = new List<ApplicationConfigurationCallback>(
                 configureApplicationSpecializedCount);
             configureApplicationSpecialized?.Invoke(app, configureApplicationCallbacks);
@@ -183,6 +154,14 @@ namespace THNETII.AppFramework.Cli
                     (accumulated, element) => accumulated + element);
 
             TResult result = default;
+            if (async)
+            {
+
+            }
+            else
+            {
+
+            }
             app.OnExecute(() => OnExecute(app, invokeCommand,
                 configureApplicationCallback, out result));
             app.Execute(args.ZeroLengthIfNull());
