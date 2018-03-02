@@ -16,12 +16,15 @@ namespace THNETII.AppFramework.Cli
     {
         private delegate void ApplicationConfigurationCallback(IConfigurationBuilder configurationBuilder,
             IDictionary<string, string> commandLineArgumentConfigurationDictionary);
+        private delegate void ConfigureApplicationSpecialized((CommandLineApplication app,
+            ICollection<ApplicationConfigurationCallback> configurationCallbacks,
+            bool asyncExecute, Action<Task<int>> resultCallback, CancellationToken cancelToken) context);
 
         private Action<CommandLineApplication> configureApplication;
         private int configureApplicationSpecializedCount = 0;
-        private Action<CommandLineApplication, ICollection<ApplicationConfigurationCallback>> configureApplicationSpecialized;
+        private ConfigureApplicationSpecialized configureApplicationSpecialized;
         private Action<IConfigurationBuilder> configureConfiguration;
-        private Action<IServiceCollection> configureServices;
+        private Action<IServiceCollection, IConfiguration> configureServices;
 
         protected CliCommandBuilder() { }
 
@@ -42,6 +45,14 @@ namespace THNETII.AppFramework.Cli
         public CliCommandBuilder<TCommand> UseServices(
             Action<IServiceCollection> configureServices)
         {
+            if (configureServices != null)
+                return UseServices((services, _) => configureServices(services));
+            return this;
+        }
+
+        public CliCommandBuilder<TCommand> UseServices(
+            Action<IServiceCollection, IConfiguration> configureServices)
+        {
             this.configureServices += configureServices;
             return this;
         }
@@ -49,8 +60,9 @@ namespace THNETII.AppFramework.Cli
         public CliCommandBuilder<TCommand> AddArgument(string name,
             Action<CliArgumentBuilder> configureArgument)
         {
-            configureApplicationSpecialized += (app, _) =>
+            configureApplicationSpecialized += ctx =>
             {
+                var app = ctx.app;
                 var argBuilder = new CliArgumentBuilder(name);
                 configureArgument?.Invoke(argBuilder);
 
@@ -78,8 +90,9 @@ namespace THNETII.AppFramework.Cli
         public CliCommandBuilder<TCommand> AddOption(string template,
             Action<CliOptionBuilder> configureOption)
         {
-            configureApplicationSpecialized += (app, _) =>
+            configureApplicationSpecialized += ctx =>
             {
+                var app = ctx.app;
                 var optBuilder = new CliOptionBuilder(template);
                 configureOption?.Invoke(optBuilder);
 
@@ -107,6 +120,18 @@ namespace THNETII.AppFramework.Cli
             string name, Action<CliCommandBuilder<TSubCommand>> configureCommand)
             where TSubCommand : CliCommand
         {
+            configureApplicationSpecialized += ctx =>
+            {
+                var (app, _, async, resultCallback, cancelToken) = ctx;
+                var cmdBuilder = new SubCliCommandBuilder<TSubCommand>(this);
+                configureCommand?.Invoke(cmdBuilder);
+
+                app.Command(name, cmd =>
+                {
+                    cmdBuilder.PrepareExecute(cmd, async, resultCallback,
+                        cancelToken);
+                }, app.ThrowOnUnexpectedArgument);
+            };
             return this;
         }
 
@@ -116,13 +141,17 @@ namespace THNETII.AppFramework.Cli
             public CliCommandBuilder<TCommand> Parent { get; }
 
             public SubCliCommandBuilder(CliCommandBuilder<TCommand> parent)
-                : base() => Parent = parent.ThrowIfNull(nameof(parent));
+                : base()
+            {
+                Parent = parent.ThrowIfNull(nameof(parent));
+                configureConfiguration = parent.configureConfiguration;
+                configureServices = parent.configureServices;
+            }
         }
 
-        private void OnExecute<TResult>(CommandLineApplication app,
-            Func<TCommand, TResult> invokeCommand,
+        private Task<int> OnExecute(CommandLineApplication app, bool async,
             ApplicationConfigurationCallback applicationConfigurationCallback,
-            out TResult result)
+            CancellationToken cancellationToken = default)
         {
             var configBuilder = new ConfigurationBuilder();
             configureConfiguration?.Invoke(configBuilder);
@@ -131,41 +160,51 @@ namespace THNETII.AppFramework.Cli
             applicationConfigurationCallback?.Invoke(configBuilder,
                 commandLineArgumentConfigurationDictionary);
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IConfiguration>(configBuilder.Build());
-            configureServices?.Invoke(serviceCollection);
+            IConfiguration config = configBuilder.Build();
+            serviceCollection.AddSingleton(config);
+            configureServices?.Invoke(serviceCollection, config);
 
             serviceCollection.AddSingleton<TCommand>();
             var serviceProvider = serviceCollection.Build();
-
-            var cmd = serviceProvider.GetRequiredService<TCommand>();
-            result = invokeCommand(cmd);
+            using (var disposable = serviceProvider as IDisposable)
+            {
+                var cmd = serviceProvider.GetRequiredService<TCommand>();
+                if (async)
+                {
+                    if (cmd is CliAsyncCommand asyncCmd)
+                        return asyncCmd.RunAsync(cancellationToken);
+                    else
+                        return Task.Run((Func<int>)cmd.Run, cancellationToken);
+                }
+                else
+                    return Task.FromResult(cmd.Run());
+            }
         }
 
-        protected TResult DoExecute<TResult>(CommandLineApplication app,
-            string[] args, Func<TCommand, TResult> invokeCommand, bool async)
+        protected void PrepareExecute(CommandLineApplication app, bool async,
+            Action<Task<int>> resultCallback, CancellationToken cancellationToken = default)
         {
             var configureApplicationCallbacks = new List<ApplicationConfigurationCallback>(
                 configureApplicationSpecializedCount);
-            configureApplicationSpecialized?.Invoke(app, configureApplicationCallbacks);
+            configureApplicationSpecialized?.Invoke(
+                (
+                    app,
+                    configureApplicationCallbacks,
+                    async,
+                    resultCallback,
+                    cancellationToken
+                ));
             configureApplication?.Invoke(app);
 
-            var configureApplicationCallback = configureApplicationCallbacks
+            var configAppCallback = configureApplicationCallbacks
                 .Aggregate(default(ApplicationConfigurationCallback),
                     (accumulated, element) => accumulated + element);
-
-            TResult result = default;
-            if (async)
+            app.OnExecute(() =>
             {
-
-            }
-            else
-            {
-
-            }
-            app.OnExecute(() => OnExecute(app, invokeCommand,
-                configureApplicationCallback, out result));
-            app.Execute(args.ZeroLengthIfNull());
-            return result;
+                var resultTask = OnExecute(app, async, configAppCallback,
+                    cancellationToken);
+                resultCallback(resultTask);
+            });
         }
     }
 }

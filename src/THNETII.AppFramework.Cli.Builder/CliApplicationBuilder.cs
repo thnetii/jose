@@ -1,9 +1,8 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using THNETII.Common;
 
 namespace THNETII.AppFramework.Cli
 {
@@ -23,29 +22,19 @@ namespace THNETII.AppFramework.Cli
 
         public Task<int> ExecuteAsync(string[] args,
             CancellationToken cancellationToken = default)
+            => ExecuteImpl(args, async: true, cancellationToken);
+
+        private Task<int> ExecuteImpl(string[] args, bool async = false,
+            CancellationToken cancelToken = default)
         {
-            return DoExecute(args, cmd =>
-            {
-                switch (cmd)
-                {
-                    case CliAsyncCommand async:
-                        return async.RunAsync(cancellationToken);
-                    default:
-                        Func<int> syncFallback = cmd.Run;
-                        return Task.Run(syncFallback, cancellationToken);
-                }
-            });
+            var app = appFactory?.Invoke() ?? new CommandLineApplication();
+            Task<int> resultTask = default;
+            PrepareExecute(app, async, t => resultTask = t, cancelToken);
+            app.Execute(args.ZeroLengthIfNull());
+            return resultTask;
         }
 
-        public int Execute(string[] args) => DoExecute(args, cmd => cmd.Run());
-
-        private TResult DoExecute<TResult>(string[] args,
-            Func<TCommand, TResult> invokeCommand)
-        {
-            var appFactory = this.appFactory
-                ?? (() => new CommandLineApplication());
-            var app = appFactory();
-            return DoExecute(app, args, invokeCommand);
-        }
+        public int Execute(string[] args) => ExecuteImpl(args, async: false)
+            .GetAwaiter().GetResult();
     }
 }
