@@ -8,4 +8,8 @@
     <Description>TH-NETII .NET Common Command-line Interface library</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\dotnet-common\src\THNETII.Common\THNETII.Common.csproj" />
+  </ItemGroup>
+  
 </Project>

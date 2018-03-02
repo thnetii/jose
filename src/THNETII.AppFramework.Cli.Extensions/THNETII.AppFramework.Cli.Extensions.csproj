@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\THNETII.AppFramework.Cli\THNETII.AppFramework.Cli.csproj" />
+    <ProjectReference Include="..\THNETII.AppFramework.Cli.Builder\THNETII.AppFramework.Cli.Builder.csproj" />
   </ItemGroup>
 
 </Project>
