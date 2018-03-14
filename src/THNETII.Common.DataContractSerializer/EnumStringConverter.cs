@@ -99,7 +99,7 @@ namespace THNETII.Common.DataContractSerializer
         /// if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T ParseOrDefault(string s) => ParseOrDefault(s, default(T));
+        public static T ParseOrDefault(string s) => ParseOrDefault(s, default);
 
         /// <summary>
         /// Attempts to convert the string representation of the constant name, serialization name or numeric value of
