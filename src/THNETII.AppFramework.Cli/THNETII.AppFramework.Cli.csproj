@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\THNETII.Common\THNETII.Common.csproj" />
+    <ProjectReference Include="..\THNETII.Common\THNETII.Common.csproj" />
   </ItemGroup>
 
 </Project>
