@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <LangVersion>7.2</LangVersion>
-    <TargetFrameworks>netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <RootNamespace>THNETII.AppFramework.Cli</RootNamespace>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\dotnet-common\src\THNETII.Common\THNETII.Common.csproj" />
+    <ProjectReference Include="..\THNETII.Common\THNETII.Common.csproj" />
     <ProjectReference Include="..\THNETII.AppFramework.Cli\THNETII.AppFramework.Cli.csproj" />
     <ProjectReference Include="..\THNETII.DependencyInjection\THNETII.DependencyInjection.csproj" />
   </ItemGroup>
