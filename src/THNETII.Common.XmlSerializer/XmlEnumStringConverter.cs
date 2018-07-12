@@ -42,7 +42,7 @@ namespace THNETII.Common.XmlSerializer
                 if (enumMemberAttr == null)
                     continue;
                 T v = (T)fi.GetValue(null);
-                string s = enumMemberAttr.Name.IfNotNullOrWhiteSpace(fi.Name);
+                string s = enumMemberAttr.Name.IfNotNull(fi.Name);
                 dictionaryAddValueAction(s, v);
             }
         }
