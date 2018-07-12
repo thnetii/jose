@@ -5,24 +5,25 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Xml.Serialization;
 
-namespace THNETII.Common.DataContractSerializer
+namespace THNETII.Common.XmlSerializer
 {
     /// <summary>
-    /// Helper class that provides Enum-String Conversions that honour the <see cref="EnumMemberAttribute"/> applied to values of <typeparamref name="T"/>.
+    /// Helper class that provides Enum-String Conversions that honour the <see cref="XmlEnumAttribute"/> applied to values of <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">The enumeration type to convert to and from strings during serialization.</typeparam>
     /// <remarks>
     /// It is not possible to constrain <typeparamref name="T"/> to an enum, making it possible to specify any value type for <typeparamref name="T"/>.
-    /// During execution of the static contructor of the <see cref="EnumStringConverter{T}"/> type, <typeparamref name="T"/> is checked and the static 
+    /// During execution of the static contructor of the <see cref="XmlEnumStringConverter{T}"/> type, <typeparamref name="T"/> is checked and the static 
     /// constructor will throw an <see cref="ArgumentException"/>.
     /// <para>
     /// Specifying a non-enumeration type for <typeparamref name="T"/> will trigger a <see cref="TypeInitializationException"/> in the calling code
     /// where the <see cref="Exception.InnerException"/> member is set to the <see cref="ArgumentException"/> instance thrown by the static constructor of
-    /// the <see cref="EnumStringConverter{T}"/> type.
+    /// the <see cref="XmlEnumStringConverter{T}"/> type.
     /// </para>
     /// </remarks>
-    public static class EnumStringConverter<T> where T : struct, Enum
+    public static class XmlEnumStringConverter<T> where T : struct, Enum
     {
         private static readonly Type typeRef = typeof(T);
         private static readonly IDictionary<string, T> stringToValue = InitializeStringToValueDictionary();
@@ -37,11 +38,11 @@ namespace THNETII.Common.DataContractSerializer
 
             foreach (var fi in ti.DeclaredFields.Where(i => i.IsStatic))
             {
-                var enumMemberAttr = fi.GetCustomAttribute<EnumMemberAttribute>();
+                var enumMemberAttr = fi.GetCustomAttribute<XmlEnumAttribute>();
                 if (enumMemberAttr == null)
                     continue;
                 T v = (T)fi.GetValue(null);
-                string s = enumMemberAttr.IsValueSetExplicitly ? enumMemberAttr.Value : fi.Name;
+                string s = enumMemberAttr.Name.IfNotNullOrWhiteSpace(fi.Name);
                 dictionaryAddValueAction(s, v);
             }
         }
@@ -76,8 +77,8 @@ namespace THNETII.Common.DataContractSerializer
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <returns>The converted value as an instance of <typeparamref name="T"/>.</returns>
         /// <remarks>
-        /// The serialization name refers to the value specified in for the <see cref="EnumMemberAttribute.Value"/> member of an 
-        /// <see cref="EnumMemberAttribute"/> applied to one of the enumerated constants of the <typeparamref name="T"/> enumeration type.
+        /// The serialization name refers to the value specified in for the <see cref="XmlEnumAttribute.Name"/> member of an 
+        /// <see cref="XmlEnumAttribute"/> applied to one of the enumerated constants of the <typeparamref name="T"/> enumeration type.
         /// </remarks>
         [SuppressMessage("Microsoft.Design", "CA1000")]
         public static T Parse(string s)
@@ -212,7 +213,7 @@ namespace THNETII.Common.DataContractSerializer
         /// <param name="value">The value of <typeparamref name="T"/> to serialize.</param>
         /// <returns>
         /// A string containing either the serialization name if the constant equal to <paramref name="value"/> 
-        /// has an <see cref="EnumMemberAttribute"/> applied to it; otherwise, the return value of <see cref="Enum.ToString()"/> for
+        /// has an <see cref="XmlEnumAttribute"/> applied to it; otherwise, the return value of <see cref="Enum.ToString()"/> for
         /// the specified value.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1000")]

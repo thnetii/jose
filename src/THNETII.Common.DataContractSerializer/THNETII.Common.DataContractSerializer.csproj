@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <LangVersion>7.2</LangVersion>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <Description>TH-NETII .NET Common library extension for the DataContractSerializer classes in the System.Runtime.Serialization namespace</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Condition="'$(TargetFramework)'=='netstandard1.3'" Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+    <PackageReference Condition="'$(TargetFramework)'=='netstandard1.3'" Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
