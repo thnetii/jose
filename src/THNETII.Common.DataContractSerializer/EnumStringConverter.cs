@@ -51,6 +51,8 @@ namespace THNETII.Common.DataContractSerializer
             var stringToValue = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
             InitializeConversionDictionary((s, v) =>
             {
+                if (s == null)
+                    return;
                 if (!stringToValue.ContainsKey(s))
                     stringToValue[s] = v;
             });
@@ -82,7 +84,7 @@ namespace THNETII.Common.DataContractSerializer
         [SuppressMessage("Microsoft.Design", "CA1000")]
         public static T Parse(string s)
         {
-            if (stringToValue.TryGetValue(s, out T value))
+            if (s != null && stringToValue.TryGetValue(s, out T value))
                 return value;
             return (T)Enum.Parse(typeRef, s, ignoreCase: true);
         }
@@ -201,7 +203,7 @@ namespace THNETII.Common.DataContractSerializer
         [SuppressMessage("Microsoft.Design", "CA1000")]
         public static bool TryParse(string s, out T value)
         {
-            if (stringToValue.TryGetValue(s, out value))
+            if (s != null && stringToValue.TryGetValue(s, out value))
                 return true;
             return Enum.TryParse(s, out value);
         }
