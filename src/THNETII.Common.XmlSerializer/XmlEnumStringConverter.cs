@@ -3,72 +3,63 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace THNETII.Common.XmlSerializer
 {
     /// <summary>
-    /// Helper class that provides Enum-String Conversions that honour the <see cref="XmlEnumAttribute"/> applied to values of <typeparamref name="T"/>.
+    /// Helper class that provides Enum-String Conversions that honour the
+    /// <see cref="XmlEnumAttribute"/> applied to values of an enumeration type.
     /// </summary>
-    /// <typeparam name="T">The enumeration type to convert to and from strings during serialization.</typeparam>
-    /// <remarks>
-    /// It is not possible to constrain <typeparamref name="T"/> to an enum, making it possible to specify any value type for <typeparamref name="T"/>.
-    /// During execution of the static contructor of the <see cref="XmlEnumStringConverter{T}"/> type, <typeparamref name="T"/> is checked and the static 
-    /// constructor will throw an <see cref="ArgumentException"/>.
-    /// <para>
-    /// Specifying a non-enumeration type for <typeparamref name="T"/> will trigger a <see cref="TypeInitializationException"/> in the calling code
-    /// where the <see cref="Exception.InnerException"/> member is set to the <see cref="ArgumentException"/> instance thrown by the static constructor of
-    /// the <see cref="XmlEnumStringConverter{T}"/> type.
-    /// </para>
-    /// </remarks>
-    public static class XmlEnumStringConverter<T> where T : struct, Enum
+    public static class XmlEnumStringConverter
     {
-        private static readonly Type typeRef = typeof(T);
-        private static readonly IDictionary<string, T> stringToValue = InitializeStringToValueDictionary();
-        private static readonly IDictionary<T, string> valueToString = InitializeValueToStringDictionary();
-
-        [SuppressMessage("Microsoft.Usage", "CA2208", Target = "System.ArgumentException")]
-        static void InitializeConversionDictionary(Action<string, T> dictionaryAddValueAction)
+        private class EnumValues<T> where T : struct, Enum
         {
-            var ti = typeRef.GetTypeInfo();
-            if (!ti.IsEnum)
-                throw new ArgumentException($"Type Argument must represent an Enum type", nameof(T));
+            public static readonly Type TypeRef = typeof(T);
+            public static readonly IDictionary<string, T> StringToValue = InitializeStringToValueDictionary();
+            public static readonly IDictionary<T, string> ValueToString = InitializeValueToStringDictionary();
 
-            foreach (var fi in ti.DeclaredFields.Where(i => i.IsStatic))
+            [SuppressMessage("Microsoft.Usage", "CA2208", Target = "System.ArgumentException")]
+            static void InitializeConversionDictionary(Action<string, T> dictionaryAddValueAction)
             {
-                var enumMemberAttr = fi.GetCustomAttribute<XmlEnumAttribute>();
-                if (enumMemberAttr == null)
-                    continue;
-                T v = (T)fi.GetValue(null);
-                string s = enumMemberAttr.Name.IfNotNull(fi.Name);
-                dictionaryAddValueAction(s, v);
+                var ti = TypeRef.GetTypeInfo();
+                if (!ti.IsEnum)
+                    throw new ArgumentException($"Type Argument must represent an Enum type", nameof(T));
+
+                foreach (var fi in ti.DeclaredFields.Where(i => i.IsStatic))
+                {
+                    var enumMemberAttr = fi.GetCustomAttribute<XmlEnumAttribute>();
+                    if (enumMemberAttr == null)
+                        continue;
+                    T v = (T)fi.GetValue(null);
+                    string s = enumMemberAttr.Name.IfNotNull(fi.Name);
+                    dictionaryAddValueAction(s, v);
+                }
             }
-        }
 
-        static IDictionary<string, T> InitializeStringToValueDictionary()
-        {
-            var stringToValue = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
-            InitializeConversionDictionary((s, v) =>
+            static IDictionary<string, T> InitializeStringToValueDictionary()
             {
-                if (s == null)
-                    return;
-                if (!stringToValue.ContainsKey(s))
-                    stringToValue[s] = v;
-            });
-            return stringToValue;
-        }
+                var stringToValue = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
+                InitializeConversionDictionary((s, v) =>
+                {
+                    if (s == null)
+                        return;
+                    if (!stringToValue.ContainsKey(s))
+                        stringToValue[s] = v;
+                });
+                return stringToValue;
+            }
 
-        static IDictionary<T, string> InitializeValueToStringDictionary()
-        {
-            var valueToString = new Dictionary<T, string>();
-            InitializeConversionDictionary((s, v) =>
+            static IDictionary<T, string> InitializeValueToStringDictionary()
             {
-                if (!valueToString.ContainsKey(v))
-                    valueToString[v] = s;
-            });
-            return valueToString;
+                var valueToString = new Dictionary<T, string>();
+                InitializeConversionDictionary((s, v) =>
+                {
+                    if (!valueToString.ContainsKey(v))
+                        valueToString[v] = s;
+                });
+                return valueToString;
+            }
         }
 
         /// <summary>
@@ -76,6 +67,7 @@ namespace THNETII.Common.XmlSerializer
         /// or more enumerated constants to an equivalent enumerated value of <typeparamref name="T"/>.
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <returns>The converted value as an instance of <typeparamref name="T"/>.</returns>
         /// <remarks>
@@ -83,11 +75,11 @@ namespace THNETII.Common.XmlSerializer
         /// <see cref="XmlEnumAttribute"/> applied to one of the enumerated constants of the <typeparamref name="T"/> enumeration type.
         /// </remarks>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T Parse(string s)
+        public static T Parse<T>(string s) where T : struct, Enum
         {
-            if (s != null && stringToValue.TryGetValue(s, out T value))
+            if (s != null && EnumValues<T>.StringToValue.TryGetValue(s, out T value))
                 return value;
-            return (T)Enum.Parse(typeRef, s, ignoreCase: true);
+            return (T)Enum.Parse(EnumValues<T>.TypeRef, s, ignoreCase: true);
         }
 
         /// <summary>
@@ -96,13 +88,15 @@ namespace THNETII.Common.XmlSerializer
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// <para>Returns the default value for <typeparamref name="T"/> in case the string cannot be converted.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <returns>
         /// The converted value as an instance of <typeparamref name="T"/>, or the default value of <typeparamref name="T"/> 
         /// if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T ParseOrDefault(string s) => ParseOrDefault(s, @default: default);
+        public static T ParseOrDefault<T>(string s) where T : struct, Enum =>
+            ParseOrDefault<T>(s, @default: default);
 
         /// <summary>
         /// Attempts to convert the string representation of the constant name, serialization name or numeric value of
@@ -110,6 +104,7 @@ namespace THNETII.Common.XmlSerializer
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// <para>Returns the specified alternate value in case the string cannot be converted.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <param name="default">The default value to return if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>.</param>
         /// <returns>
@@ -117,7 +112,8 @@ namespace THNETII.Common.XmlSerializer
         /// if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T ParseOrDefault(string s, T @default)
+        public static T ParseOrDefault<T>(string s, T @default)
+            where T : struct, Enum
         {
             if (TryParse(s, out T value))
                 return value;
@@ -130,6 +126,7 @@ namespace THNETII.Common.XmlSerializer
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// <para>Returns the specified alternate value in case the string cannot be converted.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <param name="defaultFactory">The factory that produces the value to return if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>. Must not be <c>null</c>.</param>
         /// <returns>
@@ -138,7 +135,8 @@ namespace THNETII.Common.XmlSerializer
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="defaultFactory"/> is <c>null</c>.</exception>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T ParseOrDefault(string s, Func<T> defaultFactory)
+        public static T ParseOrDefault<T>(string s, Func<T> defaultFactory)
+             where T : struct, Enum
         {
             if (TryParse(s, out T value))
                 return value;
@@ -153,6 +151,7 @@ namespace THNETII.Common.XmlSerializer
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// <para>Returns the specified alternate value in case the string cannot be converted.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <param name="defaultFactory">The factory that produces the value to return if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>. Must not be <c>null</c>.</param>
         /// <returns>
@@ -161,7 +160,8 @@ namespace THNETII.Common.XmlSerializer
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="defaultFactory"/> is <c>null</c>.</exception>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T ParseOrDefault(string s, Func<string, T> defaultFactory)
+        public static T ParseOrDefault<T>(string s, Func<string, T> defaultFactory)
+             where T : struct, Enum
         {
             if (TryParse(s, out T value))
                 return value;
@@ -176,13 +176,14 @@ namespace THNETII.Common.XmlSerializer
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// <para>Returns <c>null</c> in case the string cannot be converted.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <returns>
         /// The converted value as an instance of <typeparamref name="T"/>, or <c>null</c>
         /// if <paramref name="s"/> cannot be converted to <typeparamref name="T"/>.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static T? ParseOrNull(string s)
+        public static T? ParseOrNull<T>(string s) where T : struct, Enum
         {
             if (TryParse(s, out T value))
                 return value;
@@ -195,6 +196,7 @@ namespace THNETII.Common.XmlSerializer
         /// <para>This operation is always case-insensitive using ordinal string comparison.</para>
         /// <para>Returns <c>null</c> in case the string cannot be converted.</para>
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert to.</typeparam>
         /// <param name="s">A string containing the name, serialization name or value to convert.</param>
         /// <param name="value">The converted value of <paramref name="s"/> if the method returns <c>true</c>.</param>
         /// <returns>
@@ -202,9 +204,10 @@ namespace THNETII.Common.XmlSerializer
         /// </returns>
         /// <remarks>If this method returns <c>false</c>, the out-value of the <paramref name="value"/> parameter is not defined.</remarks>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static bool TryParse(string s, out T value)
+        public static bool TryParse<T>(string s, out T value)
+            where T : struct, Enum
         {
-            if (s != null && stringToValue.TryGetValue(s, out value))
+            if (s != null && EnumValues<T>.StringToValue.TryGetValue(s, out value))
                 return true;
             return Enum.TryParse(s, out value);
         }
@@ -212,6 +215,7 @@ namespace THNETII.Common.XmlSerializer
         /// <summary>
         /// Returns the serialized name or the default string representation of the specified value.
         /// </summary>
+        /// <typeparam name="T">The enumeration type to convert from.</typeparam>
         /// <param name="value">The value of <typeparamref name="T"/> to serialize.</param>
         /// <returns>
         /// A string containing either the serialization name if the constant equal to <paramref name="value"/> 
@@ -219,9 +223,9 @@ namespace THNETII.Common.XmlSerializer
         /// the specified value.
         /// </returns>
         [SuppressMessage("Microsoft.Design", "CA1000")]
-        public static string ToString(T value)
+        public static string ToString<T>(T value) where T : struct, Enum
         {
-            if (valueToString.TryGetValue(value, out string s))
+            if (EnumValues<T>.ValueToString.TryGetValue(value, out string s))
                 return s;
             return value.ToString();
         }

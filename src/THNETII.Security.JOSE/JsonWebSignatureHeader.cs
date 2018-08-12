@@ -35,7 +35,7 @@ namespace THNETII.Security.JOSE
     {
         private const string applicationMediaTypePrefix = "application/";
         private readonly DuplexConversionTuple<string, JsonWebAlgorithm> alg =
-            new DuplexConversionTuple<string, JsonWebAlgorithm>(EnumStringConverter<JsonWebAlgorithm>.ParseOrDefault, EnumStringConverter<JsonWebAlgorithm>.ToString);
+            new DuplexConversionTuple<string, JsonWebAlgorithm>(EnumStringConverter.ParseOrDefault<JsonWebAlgorithm>, EnumStringConverter.ToString);
         private readonly DuplexConversionTuple<string, Uri> jku =
             new DuplexConversionTuple<string, Uri>(UriStringConverter.ParseOrDefault, UriStringConverter.ToString);
         private DuplexConversionTuple<string, MediaTypeHeaderValue> typ =

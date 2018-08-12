@@ -19,7 +19,7 @@ namespace THNETII.Security.JOSE
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var jsonObj = JObject.Load(reader);
-            var ktyValue = EnumStringConverter<JsonWebKeyType>.TryParse(jsonObj.Value<string>(JsonWebKey.KeyTypeJsonPropertyName), out var parsed) ? parsed : default(JsonWebKeyType);
+            var ktyValue = EnumStringConverter.TryParse<JsonWebKeyType>(jsonObj.Value<string>(JsonWebKey.KeyTypeJsonPropertyName), out var parsed) ? parsed : default(JsonWebKeyType);
             JsonWebKey jwk;
             switch (ktyValue)
             {
