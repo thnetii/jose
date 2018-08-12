@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace THNETII.Common.DataContractSerializer
 {
+    /// <summary>
+    /// Provides conversion methods to convert strings to a boolean value.
+    /// </summary>
     public static class BooleanStringConverter
     {
         private static TypeConverter intTypeConverter = TypeDescriptor.GetConverter(typeof(int));
