@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using THNETII.Common;
-using THNETII.Common.DataContractSerializer;
+using THNETII.Common.Serialization;
 
 namespace THNETII.Security.JOSE
 {

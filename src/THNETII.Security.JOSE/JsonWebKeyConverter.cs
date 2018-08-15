@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
 using System.Reflection;
-using THNETII.Common.DataContractSerializer;
+using THNETII.Common.Serialization;
 
 namespace THNETII.Security.JOSE
 {
