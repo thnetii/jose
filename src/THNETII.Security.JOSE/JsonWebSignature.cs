@@ -71,7 +71,7 @@ namespace THNETII.Security.JOSE
         /// </remarks>
         public string ToCompactString()
         {
-            if (Signatures != null || Signature.Length != 0)
+            if (!(Signatures is null) || Signature.Length != 0)
                 throw new InvalidOperationException();
 
             return string.Join(".",

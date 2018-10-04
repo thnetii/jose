@@ -9,7 +9,7 @@ namespace THNETII.Security.JOSE
     {
         public static JsonEcWebKey ExportJsonWebKey(this ECDsa ecdsa, bool includePrivateParameters)
         {
-            if (ecdsa == null)
+            if (ecdsa is null)
                 throw new ArgumentNullException(nameof(ecdsa));
 
             var ecdsparams = ecdsa.ExportParameters(includePrivateParameters);
@@ -18,7 +18,7 @@ namespace THNETII.Security.JOSE
                 Curve = ecdsparams.Curve,
                 Q = ecdsparams.Q
             };
-            if (ecdsparams.D != null)
+            if (!(ecdsparams.D is null))
                 jwk.D = ecdsparams.D;
 
             return jwk;
@@ -26,9 +26,9 @@ namespace THNETII.Security.JOSE
 
         public static void ImportJsonWebKey(this ECDsa ecdsa, JsonEcWebKey jwk)
         {
-            if (ecdsa == null)
+            if (ecdsa is null)
                 throw new ArgumentNullException(nameof(ecdsa));
-            else if (jwk == null)
+            else if (jwk is null)
                 throw new ArgumentNullException(nameof(jwk));
             ecdsa.ImportParameters(new ECParameters
             {

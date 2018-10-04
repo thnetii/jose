@@ -201,7 +201,7 @@ namespace THNETII.Security.JOSE
 
         private static MediaTypeHeaderValue StringToMediaTypeOrDefault(string mediaTypeString)
         {
-            if (mediaTypeString == null)
+            if (mediaTypeString is null)
                 return null;
             else if (MediaTypeHeaderValue.TryParse(mediaTypeString, out var mediaType))
             {
@@ -214,7 +214,7 @@ namespace THNETII.Security.JOSE
 
         private static string MediaTypeToString(MediaTypeHeaderValue mediaType)
         {
-            if (mediaType == null)
+            if (mediaType is null)
                 return null;
             else if (mediaType.MediaType.StartsWith(applicationMediaTypePrefix, StringComparison.OrdinalIgnoreCase) && mediaType.Parameters.Count == 0)
                 return mediaType.ToString().Substring(applicationMediaTypePrefix.Length);

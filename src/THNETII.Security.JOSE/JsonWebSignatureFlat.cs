@@ -14,17 +14,17 @@ namespace THNETII.Security.JOSE
         private readonly DuplexConversionTuple<JsonWebSignatureHeader, string> @protected =
             new DuplexConversionTuple<JsonWebSignatureHeader, string>(@protected =>
             {
-                if (@protected == null)
+                if (@protected is null)
                     return null;
                 var jsonString = JsonConvert.SerializeObject(@protected);
                 var base64UrlBytes = Encoding.UTF8.GetBytes(jsonString);
                 return Base64UrlEncoder.ToBase64UrlString(base64UrlBytes);
             }, base64UrlSring =>
             {
-                if (base64UrlSring == null)
+                if (base64UrlSring is null)
                     return null;
                 var rawBytes = Base64UrlEncoder.FromBase64UrlString(base64UrlSring);
-                if (rawBytes == null)
+                if (rawBytes is null)
                     return null;
                 var jsonString = Encoding.UTF8.GetString(rawBytes);
                 return JsonConvert.DeserializeObject<JsonWebSignatureHeader>(jsonString);

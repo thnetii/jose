@@ -50,7 +50,7 @@ namespace THNETII.Security.JOSE
 
         private string AssertKtyStringValue(string value)
         {
-            if (lockKty == null || lockKty.Item1.Equals(value, StringComparison.OrdinalIgnoreCase))
+            if (lockKty is null || lockKty.Item1.Equals(value, StringComparison.OrdinalIgnoreCase))
                 return value;
             throw new InvalidOperationException($"{nameof(value)} must be \"{lockKty.Item1}\".");
         }
@@ -70,7 +70,7 @@ namespace THNETII.Security.JOSE
 
         private JsonWebKeyType AssertKtyValue(JsonWebKeyType value)
         {
-            if (lockKty == null || lockKty.Item2 == value)
+            if (lockKty is null || lockKty.Item2 == value)
                 return value;
             throw new InvalidOperationException($"{nameof(value)} must be the {lockKty.Item2} value of the {nameof(JsonWebKeyType)} enumeration.");
         }

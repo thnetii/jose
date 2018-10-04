@@ -9,7 +9,7 @@ namespace THNETII.Security.JOSE
     {
         public static JsonOctWebKey ExportJsonWebKey(this KeyedHashAlgorithm hash)
         {
-            if (hash == null)
+            if (hash is null)
                 throw new ArgumentNullException(nameof(hash));
 
             return new JsonOctWebKey { Key = hash.Key };
@@ -17,9 +17,9 @@ namespace THNETII.Security.JOSE
 
         public static void ImportJsonWebKey(this KeyedHashAlgorithm hash, JsonOctWebKey jwk)
         {
-            if (hash == null)
+            if (hash is null)
                 throw new ArgumentNullException(nameof(hash));
-            else if (jwk == null)
+            else if (jwk is null)
                 throw new ArgumentNullException(nameof(jwk));
 
             hash.Key = jwk.Key;

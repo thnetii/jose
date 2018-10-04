@@ -19,7 +19,7 @@ namespace THNETII.Security.JOSE
         /// <exception cref="ArgumentNullException"><paramref name="rsa"/> is <c>null</c>.</exception>
         public static JsonRsaWebKey ExportJsonWebKey(this RSA rsa, bool includePrivateParameters)
         {
-            if (rsa == null)
+            if (rsa is null)
                 throw new ArgumentNullException(nameof(rsa));
 
             var param = rsa.ExportParameters(includePrivateParameters);
@@ -29,17 +29,17 @@ namespace THNETII.Security.JOSE
                 E = param.Exponent
             };
 
-            if (param.D != null)
+            if (!(param.D is null))
                 jwk.D = param.D;
-            if (param.P != null)
+            if (!(param.P is null))
                 jwk.P = param.P;
-            if (param.Q != null)
+            if (!(param.Q is null))
                 jwk.Q = param.Q;
-            if (param.DP != null)
+            if (!(param.DP is null))
                 jwk.DP = param.DP;
-            if (param.DQ != null)
+            if (!(param.DQ is null))
                 jwk.DQ = param.DQ;
-            if (param.InverseQ != null)
+            if (!(param.InverseQ is null))
                 jwk.QI = param.InverseQ;
 
             return jwk;
@@ -53,9 +53,9 @@ namespace THNETII.Security.JOSE
         /// <exception cref="ArgumentNullException">Either <paramref name="rsa"/> or <paramref name="jwk"/> is <c>null</c>.</exception>
         public static void ImportJsonWebKey(this RSA rsa, JsonRsaWebKey jwk)
         {
-            if (rsa == null)
+            if (rsa is null)
                 throw new ArgumentNullException(nameof(rsa));
-            else if (jwk == null)
+            else if (jwk is null)
                 throw new ArgumentNullException(nameof(jwk));
             rsa.ImportParameters(new RSAParameters()
             {
@@ -94,7 +94,7 @@ namespace THNETII.Security.JOSE
 
         public static JsonWebSignature SignDataAsJsonWebSignature(this RSA rsa, byte[] payload, Action<JsonWebSignatureHeader> signatureHeaderConfiguration = null)
         {
-            if (rsa == null)
+            if (rsa is null)
                 throw new ArgumentNullException(nameof(rsa));
 
             var protected_header = new JsonWebSignatureHeader
@@ -123,9 +123,9 @@ namespace THNETII.Security.JOSE
 
         public static void AddSignatureToJsonWebSignature(this RSA rsa, JsonWebSignature jws, Action<JsonWebSignatureHeader> signatureHeaderConfiguration = null)
         {
-            if (rsa == null)
+            if (rsa is null)
                 throw new ArgumentNullException(nameof(rsa));
-            else if (jws == null)
+            else if (jws is null)
                 throw new ArgumentNullException(nameof(jws));
 
             var protected_header = new JsonWebSignatureHeader
@@ -144,7 +144,7 @@ namespace THNETII.Security.JOSE
             jws.ProtectedHeader = null;
             jws.UnprotectedHeader = null;
             jws.Signature = null;
-            if (jws.Signatures == null)
+            if (jws.Signatures is null)
                 jws.Signatures = new List<JsonWebSignatureFlat>(1);
             jws.Signatures.Add(new JsonWebSignatureFlat
             {

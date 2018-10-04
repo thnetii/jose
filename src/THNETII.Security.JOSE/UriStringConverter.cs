@@ -6,7 +6,7 @@ namespace THNETII.Security.JOSE
     {
         internal static Uri ParseOrDefault(string uriString)
         {
-            if (uriString == null)
+            if (uriString is null)
                 return null;
             try { return new Uri(uriString); }
             catch (UriFormatException) { return null; }

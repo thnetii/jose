@@ -34,7 +34,7 @@ namespace THNETII.Security.JOSE
         /// <param name="data">An array of bytes that contains the data to encode. Can be <c>null</c>.</param>
         /// <returns>A URL-safe Base64 encoded representation of the specified input data; or <c>null</c> if the specified input parameter is <c>null</c>.</returns>
         public static string ToBase64UrlString(byte[] data) =>
-            data == null ? null : ToBase64UrlString(new StringBuilder(Convert.ToBase64String(data)));
+            data is null ? null : ToBase64UrlString(new StringBuilder(Convert.ToBase64String(data)));
 
         /// <exception cref="FormatException">The URL-safe Base64 encoded string has an invalid length.</exception>
         private static string FromBase64UrlString(StringBuilder base64Builder)
