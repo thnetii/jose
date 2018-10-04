@@ -35,5 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.1" PrivateAssets="All" />
+    <ProjectReference Condition="!$(MSBuildProjectName.Contains('THNETII.Common.Analyzers'))"
+                      Include="$(MSBuildThisFileDirectory)analysis\THNETII.Common.Analyzers\THNETII.Common.Analyzers.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
   </ItemGroup>
 </Project>
