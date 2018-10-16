@@ -9,6 +9,9 @@
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework Condition="'$(BuildDefaultTargetFramework)'!=''">netstandard2.0</TargetFramework>
+  </PropertyGroup>
   <PropertyGroup Label="Repository Metadata">
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/thnetii/dotnet-common.git</RepositoryUrl>
