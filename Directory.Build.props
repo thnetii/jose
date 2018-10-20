@@ -41,7 +41,7 @@
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Label="TH-NETII Analyzer" Condition="'$(UseThnetiiAnalyzer)'!=''">
     <ProjectReference Condition="!$(MSBuildProjectName.Contains('THNETII.Common.Analyzers'))"
