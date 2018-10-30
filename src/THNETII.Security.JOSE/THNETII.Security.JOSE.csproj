@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup Label="ProjectReferences">
-    <ProjectReference Include="..\THNETII.Common\THNETII.Common.csproj" />
-    <ProjectReference Include="..\THNETII.Common.Serialization\THNETII.Common.Serialization.csproj" />
+    <ProjectReference Include="..\..\dotnet-common\src\THNETII.Common\THNETII.Common.csproj" />
+    <ProjectReference Include="..\..\dotnet-common\src\THNETII.Common.Serialization\THNETII.Common.Serialization.csproj" />
   </ItemGroup>
 
   <ItemGroup Label="PackageReferences">
