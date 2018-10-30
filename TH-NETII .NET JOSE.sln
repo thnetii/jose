@@ -5,23 +5,34 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{47182BA1-C1D7-4AF8-9DF6-84F8F5DC142E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THNETII.Security.JOSE", "src\THNETII.Security.JOSE\THNETII.Security.JOSE.csproj", "{BB85D5EA-F665-4A1D-9D19-02804DC21F7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "THNETII.Security.JOSE", "src\THNETII.Security.JOSE\THNETII.Security.JOSE.csproj", "{BB85D5EA-F665-4A1D-9D19-02804DC21F7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THNETII.Security.JOSE.Cli", "src\THNETII.Security.JOSE.Cli\THNETII.Security.JOSE.Cli.csproj", "{E06D35D4-0604-4925-80BC-6E5B075CEA3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "THNETII.Security.JOSE.Cli", "src\THNETII.Security.JOSE.Cli\THNETII.Security.JOSE.Cli.csproj", "{E06D35D4-0604-4925-80BC-6E5B075CEA3D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BAA5580F-EF54-411D-AE96-339440F242AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THNETII.Security.JOSE.Test", "test\THNETII.Security.JOSE.Test\THNETII.Security.JOSE.Test.csproj", "{0FC80D1F-C013-485B-A9CA-FF30C85D5070}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "THNETII.Security.JOSE.Test", "test\THNETII.Security.JOSE.Test\THNETII.Security.JOSE.Test.csproj", "{0FC80D1F-C013-485B-A9CA-FF30C85D5070}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnet-common", "dotnet-common", "{41E29074-EC6D-4D35-9748-A42F045ACBD6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6B32DA94-2F7A-47A0-B21B-8536C5AAB841}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THNETII.Common", "dotnet-common\src\THNETII.Common\THNETII.Common.csproj", "{4907A703-7A66-4F5A-A36C-9DB2C2303ADC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "THNETII.Common", "dotnet-common\src\THNETII.Common\THNETII.Common.csproj", "{4907A703-7A66-4F5A-A36C-9DB2C2303ADC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THNETII.Common.Serialization", "dotnet-common\src\THNETII.Common.Serialization\THNETII.Common.Serialization.csproj", "{86DC3475-3212-4866-B67D-206E5DE4894D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "THNETII.Common.Serialization", "dotnet-common\src\THNETII.Common.Serialization\THNETII.Common.Serialization.csproj", "{86DC3475-3212-4866-B67D-206E5DE4894D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THNETII.Common.Cli", "dotnet-common\src\THNETII.Common.Cli\THNETII.Common.Cli.csproj", "{F9E0B06D-7324-4F4B-AB86-F926D50BB4C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "THNETII.Common.Cli", "dotnet-common\src\THNETII.Common.Cli\THNETII.Common.Cli.csproj", "{F9E0B06D-7324-4F4B-AB86-F926D50BB4C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{96AFC74A-08B5-4401-B4EF-4CE5826AD42F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		AllRules.ruleset = AllRules.ruleset
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,9 +42,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BB85D5EA-F665-4A1D-9D19-02804DC21F7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -108,6 +116,9 @@ Global
 		{F9E0B06D-7324-4F4B-AB86-F926D50BB4C3}.Release|x64.Build.0 = Release|Any CPU
 		{F9E0B06D-7324-4F4B-AB86-F926D50BB4C3}.Release|x86.ActiveCfg = Release|Any CPU
 		{F9E0B06D-7324-4F4B-AB86-F926D50BB4C3}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BB85D5EA-F665-4A1D-9D19-02804DC21F7A} = {47182BA1-C1D7-4AF8-9DF6-84F8F5DC142E}
