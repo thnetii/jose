@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Product>TH-NETII JOSE Utilities</Product>
     <Description>Command-line interface application for easy interaction with JSON JSON Object Signing and Encryption (JOSE) payloads.</Description>
   </PropertyGroup>
@@ -13,8 +13,4 @@
     <ProjectReference Include="..\THNETII.Security.JOSE\THNETII.Security.JOSE.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.5" />
-  </ItemGroup>
-  
 </Project>
