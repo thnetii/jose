@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using THNETII.Common;
 using System.Runtime.Serialization;
+using THNETII.Common.Serialization;
 
 namespace THNETII.Security.JOSE
 {
@@ -91,7 +92,7 @@ namespace THNETII.Security.JOSE
                 return "P-384";
             else if (curveName == ECCurve.NamedCurves.nistP521.Oid.FriendlyName)
                 return "P-521";
-            throw new ArgumentException($"Unknown cryptographic curve: \"{curveName}\". Refer to https://tools.ietf.org/html/rfc7518#section-6.2.1.1 for valid values.", 
+            throw new ArgumentException($"Unknown cryptographic curve: \"{curveName}\". Refer to https://tools.ietf.org/html/rfc7518#section-6.2.1.1 for valid values.",
                 string.Join(".", nameof(curve), nameof(curve.Oid), nameof(curve.Oid.FriendlyName)));
         }
     }

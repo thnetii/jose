@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Text;
 using THNETII.Common;
+using THNETII.Common.Serialization;
 
 namespace THNETII.Security.JOSE
 {

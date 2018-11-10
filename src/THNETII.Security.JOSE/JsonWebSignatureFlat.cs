@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Text;
 using THNETII.Common;
+using THNETII.Common.Serialization;
 
 namespace THNETII.Security.JOSE
 {
@@ -49,7 +50,7 @@ namespace THNETII.Security.JOSE
         /// Gets or sets the Base64 URL-safe encoded protected header for this signature element.
         /// </summary>
         /// <remarks>
-        /// The "protected" member MUST be present and contain the 
+        /// The "protected" member MUST be present and contain the
         /// URL-safe Base64-encoded JSON representation of the JWS protected
         /// header used together with the <see cref="Signature"/> stored in this instance.
         /// These Header Parameter values are integrity protected.
@@ -66,7 +67,7 @@ namespace THNETII.Security.JOSE
         /// Gets or sets the protected header instance for this signature element.
         /// </summary>
         /// <remarks>
-        /// The "protected" member MUST be present and contain the 
+        /// The "protected" member MUST be present and contain the
         /// URL-safe Base64-encoded JSON representation of the JWS protected
         /// header used together with the <see cref="Signature"/> stored in this instance.
         /// These Header Parameter values are integrity protected.
