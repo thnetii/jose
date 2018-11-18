@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup Label="Common Package Metadata">
     <Authors>Fredrik Høisæther Rasch</Authors>
@@ -33,10 +33,10 @@
   <PropertyGroup Label="Version">
     <VersionPrefix>0.0.1</VersionPrefix>
     <FileVersion>$(VersionPrefix)</FileVersion>
-    <AssemblyVersion Condition="'$(BuildNumber)'==''">$(FileVersion)</AssemblyVersion>
-    <AssemblyVersion Condition="'$(BuildNumber)'!=''">$(FileVersion).$(BuildNumber)</AssemblyVersion>
-    <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'!=''">$(VersionSuffix)-b$(BuildNumber)</VersionSuffix>
-    <VersionSuffix Condition="'$(BuildNumber)'!='' And '$(VersionSuffix)'==''">$(VersionSuffix)b$(BuildNumber)</VersionSuffix>
+    <AssemblyVersion Condition="'$(BuildId)'==''">$(FileVersion)</AssemblyVersion>
+    <AssemblyVersion Condition="'$(BuildId)'!=''">$(FileVersion).$(BuildId)</AssemblyVersion>
+    <VersionSuffix Condition="'$(BuildId)'!='' And '$(VersionSuffix)'!=''">$(VersionSuffix)-b$(BuildId)</VersionSuffix>
+    <VersionSuffix Condition="'$(BuildId)'!='' And '$(VersionSuffix)'==''">$(VersionSuffix)b$(BuildId)</VersionSuffix>
   </PropertyGroup>
   <PropertyGroup>
     <Features>IOperation</Features>
@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Label="SourceLink">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
