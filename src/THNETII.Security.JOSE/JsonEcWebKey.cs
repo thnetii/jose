@@ -86,11 +86,14 @@ namespace THNETII.Security.JOSE
             if (!curve.IsNamed)
                 throw new ArgumentException("Cryptographic curve must be named.", nameof(curve));
             var curveName = curve.Oid.FriendlyName.ThrowIfNullOrWhiteSpace(string.Join(".", nameof(curve), nameof(curve.Oid), nameof(curve.Oid.FriendlyName)));
-            if (curveName == ECCurve.NamedCurves.nistP256.Oid.FriendlyName)
+            if (curveName == ECCurve.NamedCurves.nistP256.Oid.FriendlyName ||
+                string.Equals(curveName, "ECDSA_P256", StringComparison.OrdinalIgnoreCase))
                 return "P-256";
-            else if (curveName == ECCurve.NamedCurves.nistP384.Oid.FriendlyName)
+            else if (curveName == ECCurve.NamedCurves.nistP384.Oid.FriendlyName ||
+                string.Equals(curveName, "ECDSA_P384", StringComparison.OrdinalIgnoreCase))
                 return "P-384";
-            else if (curveName == ECCurve.NamedCurves.nistP521.Oid.FriendlyName)
+            else if (curveName == ECCurve.NamedCurves.nistP521.Oid.FriendlyName ||
+                string.Equals(curveName, "ECDSA_P521", StringComparison.OrdinalIgnoreCase))
                 return "P-521";
             throw new ArgumentException($"Unknown cryptographic curve: \"{curveName}\". Refer to https://tools.ietf.org/html/rfc7518#section-6.2.1.1 for valid values.",
                 string.Join(".", nameof(curve), nameof(curve.Oid), nameof(curve.Oid.FriendlyName)));
