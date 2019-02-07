@@ -4,3 +4,6 @@
 [submodule "dotnet-common"]
 	path = dotnet-common
 	url = https://github.com/thnetii/dotnet-common.git
+[submodule "rfc"]
+	path = rfc
+	url = https://github.com/thnetii/jose-rfc.git
