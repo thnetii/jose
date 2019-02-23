@@ -1,11 +1,12 @@
 parameters:
   testProjects:               '[Tt]est/*/*.csproj'
-  commonArguments:            '-p:BuildId=$(Build.BuildId) "-logger:THNETII.AzureDevOps.MSBuild.Logger.AzureDevOpsLogger,$(Build.SourcesDirectory)/ci/THNETII.AzureDevOps.MSBuild.Logger/THNETII.AzureDevOps.MSBuild.Logger.dll"'
+  commonArguments:            '-p:BuildId=$(Build.BuildId) "-logger:THNETII.AzureDevOps.MSBuild.Logger.AzureDevOpsLogger,$(Build.SourcesDirectory)/.azure-pipelines/THNETII.AzureDevOps.MSBuild.Logger/THNETII.AzureDevOps.MSBuild.Logger.dll"'
   configurationId:
   addConfigurationArguments:
 steps:
 - task: DotNetCoreCLI@2
   displayName:  dotnet build-server shutdown
+  condition:    ne(variables['SkipStepTestRun'], 'true')
   inputs:
     command:    custom
     custom:     build-server
