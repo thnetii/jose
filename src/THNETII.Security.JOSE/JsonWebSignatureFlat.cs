@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Text;
+
 using THNETII.Common;
-using THNETII.Common.Serialization;
+using THNETII.TypeConverter;
 
 namespace THNETII.Security.JOSE
 {

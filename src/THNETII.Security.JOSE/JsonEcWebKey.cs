@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Security.Cryptography;
-using THNETII.Common;
 using System.Runtime.Serialization;
-using THNETII.Common.Serialization;
+using System.Security.Cryptography;
+
+using THNETII.Common;
+using THNETII.TypeConverter;
 
 namespace THNETII.Security.JOSE
 {

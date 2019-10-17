@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using THNETII.Common;
+﻿using THNETII.Common;
 
 namespace THNETII.Security.JOSE.Cli
 {
