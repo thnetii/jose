@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using static THNETII.Security.JOSE.JsonWebAlgorithm;

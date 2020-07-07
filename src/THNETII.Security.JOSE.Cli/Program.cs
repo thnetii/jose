@@ -1,4 +1,4 @@
-﻿using THNETII.Common;
+using THNETII.Common;
 
 namespace THNETII.Security.JOSE.Cli
 {

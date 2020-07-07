@@ -1,4 +1,4 @@
-﻿# THNETII.Security.JOSE
+# THNETII.Security.JOSE
 
 TH-NETII JSON Object Signing and Encryption (JOSE) library for .NET
 
