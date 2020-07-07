@@ -1,4 +1,4 @@
-﻿namespace THNETII.Security.JOSE
+namespace THNETII.Security.JOSE
 {
     /// <summary>
     /// Defines common IANA Media Types used for JOSE.

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
