@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Product>TH-NETII JOSE Utilities</Product>
     <Description>Command-line interface application for easy interaction with JSON JSON Object Signing and Encryption (JOSE) payloads.</Description>
   </PropertyGroup>
